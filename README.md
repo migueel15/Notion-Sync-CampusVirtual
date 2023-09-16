@@ -59,3 +59,9 @@ Para las asignaturas por defecto coge el nombre de la asignatura que aparece en 
 Ejecuta npm run start para que el script se ejecute y listo. Ya tendrás tus tareas del campus en el calendario de notion.
 
 Un detalle a tener en cuenta. La api de notion solo devuelve como máximo una lista de 100 elementos. Si tiene más de 100 elementos entre el rango de tiempo que se utiliza no se mostrarán todas. (Para un futuro pondré una opcion de flujo alto de tareas, aunque obviamente aumentará el tiempo de recogida de datos)
+
+## Automatización
+
+Si quieres que el script se corra de forma automática esto dependerá del sistema operativo.
+Si usas linux puedes usar cron para ello.
+Si usas windows utiliza el programador de tareas "https://www.youtube.com/watch?v=CJw_JEt_L6I"
