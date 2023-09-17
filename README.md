@@ -9,12 +9,12 @@ Sincronización automática entre el campus virtual de la uma y tu base de datos
 
 ¿Qué obtiene del campus virtual?
 
-- Recoge las tareas en un rango (4 días previos - 60 próximos días)
+- Recoge las tareas en un rango (4 días previos - 60 próximos días por defecto, se puede cambiar en config.js)
 - Crea, actualiza y elimina las tareas en notion
 
 ¿Qué obtiene de notion?
 
-- Recoge las tareas en un rango (4 días previos - 60 próximos días) que tenga como propiedad que provienen del CV. No accede al resto de datos
+- Recoge las tareas en un rango (4 días previos - 60 próximos días por defecto, se puede cambiar en config.js) que tenga como propiedad que provienen del CV. No accede al resto de datos
 
 ## Requisitos
 
@@ -52,7 +52,7 @@ Una vez guardadas las tres variables es importante que tu base de datos tenga un
 
 ## Configuración del nombre de la asignatura
 
-Para las asignaturas por defecto coge el nombre de la asignatura que aparece en las tareas del campus virtual. Estos nombres suelen ser largos. En el archivo subjects.js hay una lista de asignaturas. El valor de la izquierda representa la palabra que busca en ese nombre largo(puede ser una parte de él ya que busco que esta cadena de texto se encuentre en el nombre de la asignatura) y el valor de la derecha es en el que es convertido. De esta forma podemos formatear el nombre de la asignatura para convertirlo en algo más corto y personalizado. En caso de que no encuentre ningún valor de la lista simplemente creará la tarea con el nombre largo en el apartado de Asignatura. Si no sabes que nombre largo tiene lo más fácil es esperar a que una tarea de esa asignatura sea creada. Mira el campo Asignatura y crea en la lista de subjects.js (con el mismo formato), a la izq ese nombre o parte de él(las mayus importan) y a la derecha el valor en el que quieres que se formatée. Borra la tarea y corre de nuevo el script y verás como ahora la asignatura tiene el nombre que quieres. Para las próximas tareas de la asignatura funcionará automáticamente.
+Para las asignaturas por defecto coge el nombre de la asignatura que aparece en las tareas del campus virtual. Estos nombres suelen ser largos. En el archivo config.js hay una lista de asignaturas. El valor de la izquierda representa la palabra que busca en ese nombre largo(puede ser una parte de él ya que busco que esta cadena de texto se encuentre en el nombre de la asignatura) y el valor de la derecha es en el que es convertido. De esta forma podemos formatear el nombre de la asignatura para convertirlo en algo más corto y personalizado. En caso de que no encuentre ningún valor de la lista simplemente creará la tarea con el nombre largo en el apartado de Asignatura. Si no sabes que nombre largo tiene lo más fácil es esperar a que una tarea de esa asignatura sea creada. Mira el campo Asignatura y crea en la lista de config.js (con el mismo formato), a la izq ese nombre o parte de él(las mayus importan) y a la derecha el valor en el que quieres que se formatée. Borra la tarea y corre de nuevo el script y verás como ahora la asignatura tiene el nombre que quieres. Para las próximas tareas de la asignatura funcionará automáticamente.
 
 ## Ejecución del programa
 
