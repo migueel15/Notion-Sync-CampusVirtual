@@ -5,20 +5,10 @@ const envPath = path.resolve(__dirname, "../.env")
 dotenv.config({ path: envPath })
 const { getCvEvents } = require("./cv")
 const { exec } = require("child_process")
+const { getDateRange } = require("./utils")
+const dates = getDateRange()
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY })
-
-function setDateRange(prev, next) {
-  const date = new Date()
-  let minDate = new Date()
-  let maxDate = new Date()
-  minDate.setDate(date.getDate() - prev)
-  maxDate.setDate(date.getDate() + next)
-
-  minDate = minDate.toISOString().split("T")[0]
-  maxDate = maxDate.toISOString().split("T")[0]
-  return { minDate, maxDate }
-}
 
 async function updateEvent(newEvent) {
   if (newEvent.descripcion === undefined) {
@@ -69,6 +59,9 @@ async function updateEvent(newEvent) {
 async function createEvent(newEvent) {
   if (newEvent.descripcion === undefined) {
     newEvent.descripcion = ""
+  }
+  if (newEvent.asignatura === "") {
+    newEvent.asignatura = " "
   }
   await notion.pages.create({
     parent: {
@@ -145,8 +138,6 @@ async function deleteEvent(event) {
   } catch {}
 }
 
-const { minDate, maxDate } = setDateRange(4, 60)
-
 const response = notion.databases.query({
   database_id: process.env.NOTION_DATABASE_ID,
   filter: {
@@ -154,13 +145,13 @@ const response = notion.databases.query({
       {
         property: "Fecha",
         date: {
-          on_or_after: minDate,
+          on_or_after: dates.minDate,
         },
       },
       {
         property: "Fecha",
         date: {
-          on_or_before: maxDate,
+          on_or_before: dates.maxDate,
         },
       },
     ],

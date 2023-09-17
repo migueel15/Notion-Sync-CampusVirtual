@@ -1,11 +1,17 @@
 const url = process.env.CALENDAR_URL
 const ics = require("ical.js")
-const { getAsignatura } = require("./subjects")
+const { mapAsignatura, getDateRange } = require("./utils")
 
 const timeZonedDate = (date) => {
   const timestamp = new Date(date)
   timestamp.setMinutes(timestamp.getMinutes() + 120)
   return timestamp
+}
+
+const isInRange = (string) => {
+  const datesRange = getDateRange()
+  const date = string.split("T")[0]
+  return date >= datesRange.minDate && date <= datesRange.maxDate
 }
 
 async function getCvEvents() {
@@ -14,7 +20,7 @@ async function getCvEvents() {
   data = await response.text()
   data = ics.parse(data)
   events = data[2]
-  const mappedEvents = events.map((event) => {
+  let mappedEvents = events.map((event) => {
     const cv_id = event[1][0][3]
     const title = event[1][1][3]
     let asignatura = ""
@@ -22,7 +28,7 @@ async function getCvEvents() {
     try {
       descripcion = event[1][2][3]
       asignatura = event[1][8][3]
-      asignatura = getAsignatura(asignatura)
+      asignatura = mapAsignatura(asignatura)
     } catch (error) {}
     const startDate = timeZonedDate(event[1][6][3])
       .toISOString()
@@ -31,8 +37,13 @@ async function getCvEvents() {
       .toISOString()
       .replace("Z", "+02:00")
 
-    return { title, cv_id, startDate, endDate, descripcion, asignatura }
+    if (isInRange(startDate)) {
+      return { title, cv_id, startDate, endDate, descripcion, asignatura }
+    } else {
+      return undefined
+    }
   })
+  mappedEvents = mappedEvents.filter((event) => event !== undefined)
   return mappedEvents
 }
 
