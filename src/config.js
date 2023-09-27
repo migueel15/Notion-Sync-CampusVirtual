@@ -8,7 +8,7 @@ const dateRange = {
 // mapeo del nombre de las asignaturas
 const asignaturas = {
   FunEle: "Electronica",
-  CalparCom: "Calculo",
+  "Cálculo para la Computación": "Calculo",
   EstDat: "ED",
   EstCom: "EC",
   AnaDis: "ADA",
