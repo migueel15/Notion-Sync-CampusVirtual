@@ -63,66 +63,72 @@ async function createEvent(newEvent) {
   if (newEvent.asignatura === "") {
     newEvent.asignatura = " "
   }
-  await notion.pages.create({
-    parent: {
-      database_id: process.env.NOTION_DATABASE_ID,
-    },
-    icon: {
-      type: "emoji",
-      emoji: "🔵",
-    },
-    properties: {
-      "Nombre de tarea": {
-        title: [
-          {
-            text: {
-              content: newEvent.title,
-            },
-          },
-        ],
-      },
-      From: {
-        select: {
-          name: "CV",
-        },
-      },
-      Descripcion: {
-        rich_text: [
-          {
-            text: {
-              content: newEvent.descripcion,
-            },
-          },
-        ],
-      },
-      Asignatura: {
-        select: {
-          name: newEvent.asignatura,
-        },
-      },
-      "cv-id": {
-        rich_text: [
-          {
-            text: {
-              content: newEvent.cv_id,
-            },
-          },
-        ],
-      },
-      Fecha: {
-        date: {
-          start: newEvent.startDate,
-        },
-      },
-    },
-  })
-
-  const fechaFormateada = new Date(newEvent.startDate).toLocaleString()
   try {
+    await notion.pages.create({
+      parent: {
+        database_id: process.env.NOTION_DATABASE_ID,
+      },
+      icon: {
+        type: "emoji",
+        emoji: "🔵",
+      },
+      properties: {
+        "Nombre de tarea": {
+          title: [
+            {
+              text: {
+                content: newEvent.title,
+              },
+            },
+          ],
+        },
+        From: {
+          select: {
+            name: "CV",
+          },
+        },
+        Descripcion: {
+          rich_text: [
+            {
+              text: {
+                content: newEvent.descripcion,
+              },
+            },
+          ],
+        },
+        Asignatura: {
+          select: {
+            name: newEvent.asignatura,
+          },
+        },
+        "cv-id": {
+          rich_text: [
+            {
+              text: {
+                content: newEvent.cv_id,
+              },
+            },
+          ],
+        },
+        Fecha: {
+          date: {
+            start: newEvent.startDate,
+          },
+        },
+      },
+    })
+
+    const fechaFormateada = new Date(newEvent.startDate).toLocaleString()
+    try {
+      exec(
+        `notify-send -c "notion-event" '<b>Notion - Nuevo evento</b>' '${newEvent.asignatura}\n${newEvent.title}\n${fechaFormateada}'`
+      )
+    } catch {}
+  } catch (error) {
     exec(
-      `notify-send -c "notion-event" '<b>Notion - Nuevo evento</b>' '${newEvent.asignatura}\n${newEvent.title}\n${fechaFormateada}'`
+      `notify-send -c "notion-event" '<b>Notion - Error</b>' 'No se ha podido crear: ${newEvent.title}\n${error.message}'`
     )
-  } catch {}
+  }
 }
 
 async function deleteEvent(event) {
