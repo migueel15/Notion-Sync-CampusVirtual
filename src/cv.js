@@ -5,6 +5,7 @@ const { mapAsignatura, getDateRange } = require("./utils")
 const timeZonedDate = (date) => {
   const timestamp = new Date(date)
   timestamp.setMinutes(timestamp.getMinutes() + 120)
+  timestamp.setSeconds(0)
   return timestamp
 }
 
@@ -27,6 +28,12 @@ async function getCvEvents() {
     let descripcion = ""
     try {
       descripcion = event[1][2][3]
+
+      if (descripcion.length > 2000) {
+        descripcion = descripcion.slice(0, 1997)
+        descripcion += "..."
+      }
+
       asignatura = event[1][8][3]
       asignatura = mapAsignatura(asignatura)
     } catch (error) {}
