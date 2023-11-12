@@ -1,7 +1,7 @@
 // como minimo 4 dias
 // como maximo 60 dias
 const dateRange = {
-  startDate: 4,
+  startDate: 3,
   endDate: 60,
 }
 

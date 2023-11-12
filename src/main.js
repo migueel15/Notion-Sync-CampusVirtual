@@ -14,7 +14,7 @@ async function updateEvent(newEvent) {
   if (newEvent.descripcion === undefined) {
     newEvent.descripcion = ""
   }
-  const response = await notion.pages.update({
+  await notion.pages.update({
     page_id: newEvent.id,
     properties: {
       "Nombre de tarea": {

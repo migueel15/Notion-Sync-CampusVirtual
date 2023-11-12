@@ -17,9 +17,9 @@ function getDateRange() {
   const minDate = new Date()
   const maxDate = new Date()
   minDate.setDate(today.getDate() - dateRange.startDate)
-  minDate.setHours(2, 0, 0, 0)
+  minDate.setHours(1, 0, 0, 0)
   maxDate.setDate(today.getDate() + dateRange.endDate - 1)
-  maxDate.setHours(2, 0, 0, 0)
+  maxDate.setHours(1, 0, 0, 0)
 
   return {
     minDate: minDate.toISOString().split("T")[0],
