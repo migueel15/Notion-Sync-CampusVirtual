@@ -43,12 +43,15 @@ async function updateEvent(newEvent) {
       Fecha: {
         date: {
           start: newEvent.date,
+          time_zone: "Europe/Madrid",
         },
       },
     },
   })
 
-  const fechaFormateada = new Date(newEvent.date).toLocaleString()
+  const fechaFormateada = new Date(newEvent.date)
+    .toUTCString()
+    .replace(" GMT", "")
   try {
     exec(
       `notify-send -c "notion-event" '<b>Notion - Evento actualizado</b>' '${newEvent.asignatura}\n${newEvent.title}\n${fechaFormateada}'`
@@ -113,12 +116,15 @@ async function createEvent(newEvent) {
         Fecha: {
           date: {
             start: newEvent.startDate,
+            time_zone: "Europe/Madrid",
           },
         },
       },
     })
 
-    const fechaFormateada = new Date(newEvent.startDate).toLocaleString()
+    const fechaFormateada = new Date(newEvent.startDate)
+      .toUTCString()
+      .replace(" GMT", "")
     try {
       exec(
         `notify-send -c "notion-event" '<b>Notion - Nuevo evento</b>' '${newEvent.asignatura}\n${newEvent.title}\n${fechaFormateada}'`
@@ -136,7 +142,7 @@ async function deleteEvent(event) {
     page_id: event.id,
     archived: true,
   })
-  const fechaFormateada = new Date(event.date).toLocaleString()
+  const fechaFormateada = new Date(event.date).toUTCString().replace(" GMT", "")
   try {
     exec(
       `notify-send -c "notion-event" '<b>Notion - Evento borrado</b>' '${event.asignatura}\n${event.title}\n${fechaFormateada}'`
@@ -152,18 +158,19 @@ const response = notion.databases.query({
         property: "Fecha",
         date: {
           on_or_after: dates.minDate,
+          time_zone: "Europe/Madrid",
         },
       },
       {
         property: "Fecha",
         date: {
           on_or_before: dates.maxDate,
+          time_zone: "Europe/Madrid",
         },
       },
     ],
   },
 })
-
 response.then(async (res) => {
   const list = res.results
   const fromCV = list.filter((page) => {
@@ -173,7 +180,8 @@ response.then(async (res) => {
     const title = page.properties["Nombre de tarea"].title[0].plain_text
     const id = page.id
     const cv_id = page.properties["cv-id"].rich_text[0]["plain_text"]
-    const date = page.properties["Fecha"].date.start
+    let date = page.properties["Fecha"].date.start
+    date = date.substring(0, date.length - 6) + "Z"
     let descripcion = ""
     let asignatura = ""
     try {
@@ -189,7 +197,6 @@ response.then(async (res) => {
     let found = false
     let outdate = false
     const { title, cv_id, startDate, descripcion, asignatura } = event
-
     const notionEvent = mappedList.find((page) => page.cv_id == cv_id)
     if (notionEvent) {
       eventsDeleted = eventsDeleted.filter((page) => page.cv_id !== cv_id)

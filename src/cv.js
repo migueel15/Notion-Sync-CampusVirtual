@@ -37,12 +37,10 @@ async function getCvEvents() {
       asignatura = event[1][8][3]
       asignatura = mapAsignatura(asignatura)
     } catch (error) {}
-    const startDate = timeZonedDate(event[1][6][3])
-      .toISOString()
-      .replace("Z", "+02:00")
-    const endDate = timeZonedDate(event[1][7][3])
-      .toISOString()
-      .replace("Z", "+02:00")
+    const startDate = timeZonedDate(event[1][6][3]).toISOString()
+    //.replace("Z", "+02:00")
+    const endDate = timeZonedDate(event[1][7][3]).toISOString()
+    //.replace("Z", "+02:00")
     if (isInRange(startDate)) {
       return { title, cv_id, startDate, endDate, descripcion, asignatura }
     } else {
