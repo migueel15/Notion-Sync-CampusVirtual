@@ -11,7 +11,7 @@ const timeZonedDate = (date) => {
 
 const isInRange = (string) => {
   const datesRange = getDateRange()
-  const date = string.split("T")[0]
+  const date = string
   return date >= datesRange.minDate && date <= datesRange.maxDate
 }
 

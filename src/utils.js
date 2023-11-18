@@ -22,8 +22,10 @@ function getDateRange() {
   maxDate.setHours(0, 0, 0, 0)
 
   return {
-    minDate: minDate.toISOString().split("T")[0],
-    maxDate: maxDate.toISOString().split("T")[0],
+    //minDate: minDate.toISOString().split("T")[0],
+    //maxDate: maxDate.toISOString().split("T")[0],
+    minDate: minDate.toISOString(),
+    maxDate: maxDate.toISOString(),
   }
 }
 

@@ -171,6 +171,7 @@ const response = notion.databases.query({
     ],
   },
 })
+console.log(dates.minDate, dates.maxDate)
 response.then(async (res) => {
   const list = res.results
   const fromCV = list.filter((page) => {
