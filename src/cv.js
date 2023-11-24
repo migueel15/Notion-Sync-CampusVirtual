@@ -2,13 +2,6 @@ const url = process.env.CALENDAR_URL
 const ics = require("ical.js")
 const { mapAsignatura, getDateRange } = require("./utils")
 
-const timeZonedDate = (date) => {
-  const timestamp = new Date(date)
-  timestamp.setMinutes(timestamp.getMinutes() + 60)
-  timestamp.setSeconds(0)
-  return timestamp
-}
-
 const isInRange = (string) => {
   const datesRange = getDateRange()
   const date = string
@@ -37,10 +30,10 @@ async function getCvEvents() {
       asignatura = event[1][8][3]
       asignatura = mapAsignatura(asignatura)
     } catch (error) {}
-    const startDate = timeZonedDate(event[1][6][3]).toISOString()
-    //.replace("Z", "+02:00")
-    const endDate = timeZonedDate(event[1][7][3]).toISOString()
-    //.replace("Z", "+02:00")
+    const startDate = new Date(event[1][6][3]).toISOString()
+    //const startDate = timeZonedDate(event[1][6][3]).toISOString()
+    const endDate = new Date(event[1][7][3]).toISOString()
+    //const endDate = timeZonedDate(event[1][7][3]).toISOString()
     if (isInRange(startDate)) {
       return { title, cv_id, startDate, endDate, descripcion, asignatura }
     } else {

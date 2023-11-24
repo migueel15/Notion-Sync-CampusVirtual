@@ -5,7 +5,7 @@ const envPath = path.resolve(__dirname, "../.env")
 dotenv.config({ path: envPath })
 const { getCvEvents } = require("./cv")
 const { exec } = require("child_process")
-const { getDateRange } = require("./utils")
+const { getDateRange, fromLocalToUTC, fromUTCtoLocal } = require("./utils")
 const dates = getDateRange()
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY })
@@ -42,16 +42,14 @@ async function updateEvent(newEvent) {
       },
       Fecha: {
         date: {
-          start: newEvent.date,
+          start: fromUTCtoLocal(newEvent.date),
           time_zone: "Europe/Madrid",
         },
       },
     },
   })
 
-  const fechaFormateada = new Date(newEvent.date)
-    .toUTCString()
-    .replace(" GMT", "")
+  const fechaFormateada = new Date(newEvent.date).toLocaleString()
   try {
     exec(
       `notify-send -c "notion-event" '<b>Notion - Evento actualizado</b>' '${newEvent.asignatura}\n${newEvent.title}\n${fechaFormateada}'`
@@ -115,16 +113,14 @@ async function createEvent(newEvent) {
         },
         Fecha: {
           date: {
-            start: newEvent.startDate,
+            start: fromUTCtoLocal(newEvent.startDate),
             time_zone: "Europe/Madrid",
           },
         },
       },
     })
 
-    const fechaFormateada = new Date(newEvent.startDate)
-      .toUTCString()
-      .replace(" GMT", "")
+    const fechaFormateada = new Date(newEvent.startDate).toLocaleString()
     try {
       exec(
         `notify-send -c "notion-event" '<b>Notion - Nuevo evento</b>' '${newEvent.asignatura}\n${newEvent.title}\n${fechaFormateada}'`
@@ -142,7 +138,7 @@ async function deleteEvent(event) {
     page_id: event.id,
     archived: true,
   })
-  const fechaFormateada = new Date(event.date).toUTCString().replace(" GMT", "")
+  const fechaFormateada = new Date(newEvent.startDate).toLocaleString()
   try {
     exec(
       `notify-send -c "notion-event" '<b>Notion - Evento borrado</b>' '${event.asignatura}\n${event.title}\n${fechaFormateada}'`
@@ -158,20 +154,17 @@ const response = notion.databases.query({
         property: "Fecha",
         date: {
           on_or_after: dates.minDate,
-          time_zone: "Europe/Madrid",
         },
       },
       {
         property: "Fecha",
         date: {
           on_or_before: dates.maxDate,
-          time_zone: "Europe/Madrid",
         },
       },
     ],
   },
 })
-console.log(dates.minDate, dates.maxDate)
 response.then(async (res) => {
   const list = res.results
   const fromCV = list.filter((page) => {
@@ -183,6 +176,7 @@ response.then(async (res) => {
     const cv_id = page.properties["cv-id"].rich_text[0]["plain_text"]
     let date = page.properties["Fecha"].date.start
     date = date.substring(0, date.length - 6) + "Z"
+    date = fromLocalToUTC(date).toISOString()
     let descripcion = ""
     let asignatura = ""
     try {
@@ -215,6 +209,7 @@ response.then(async (res) => {
         outdate = true
       }
       if (notionEvent.date !== startDate) {
+        console.log("notion: ", notionEvent.date, " ", "cv: ", startDate)
         notionEvent.date = startDate
         outdate = true
       }

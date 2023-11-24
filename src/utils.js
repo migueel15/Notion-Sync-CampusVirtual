@@ -14,19 +14,32 @@ function mapAsignatura(string) {
 
 function getDateRange() {
   const today = new Date()
-  const minDate = new Date()
-  const maxDate = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const minDate = new Date(today)
   minDate.setDate(today.getDate() - dateRange.startDate)
-  minDate.setHours(0, 0, 0, 0)
+
+  const maxDate = new Date(today)
   maxDate.setDate(today.getDate() + dateRange.endDate - 1)
-  maxDate.setHours(0, 0, 0, 0)
 
   return {
-    //minDate: minDate.toISOString().split("T")[0],
-    //maxDate: maxDate.toISOString().split("T")[0],
     minDate: minDate.toISOString(),
     maxDate: maxDate.toISOString(),
   }
 }
 
-module.exports = { mapAsignatura, getDateRange }
+function fromUTCtoLocal(date) {
+  const timestamp = new Date(date)
+  const offset = (timestamp.getTimezoneOffset() / 60) * -1
+  timestamp.setHours(timestamp.getHours() + offset)
+  return timestamp
+}
+
+function fromLocalToUTC(date) {
+  const timestamp = new Date(date)
+  const offset = (timestamp.getTimezoneOffset() / 60) * -1
+  timestamp.setHours(timestamp.getHours() - offset)
+  return timestamp
+}
+
+module.exports = { mapAsignatura, getDateRange, fromUTCtoLocal, fromLocalToUTC }
