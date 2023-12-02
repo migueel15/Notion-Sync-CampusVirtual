@@ -5,6 +5,7 @@ const dateRange = {
 }
 
 // mapeo del nombre de las asignaturas
+// Nombre en CV : Nombre Custom Notion
 const asignaturas = {
   FunEle: "Electronica",
   "Cálculo para la Computación": "Calculo",
@@ -15,5 +16,16 @@ const asignaturas = {
   BasDat: "BD",
 }
 
+// nombres de las propiedades de la base de datos en notion
+const propiedades = {
+  nombre: "Nombre de tarea", // nombre tarea
+  asignatura: "Asignatura", // select de asignaturas
+  descripcion: "Descripcion", // descripcion
+  fecha: "Fecha", // fecha
+  from: "From", // select (CV?)
+  cv: "cv-id", // plan text id de la tarea
+}
+
 exports.dateRange = dateRange
 exports.asignaturas = asignaturas
+exports.propiedades = propiedades

@@ -7,6 +7,7 @@ const { getCvEvents } = require("./cv")
 const { exec } = require("child_process")
 const { getDateRange, fromLocalToUTC, fromUTCtoLocal } = require("./utils")
 const dates = getDateRange()
+const { propiedades } = require("./config")
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY })
 
@@ -17,7 +18,7 @@ async function updateEvent(newEvent) {
   await notion.pages.update({
     page_id: newEvent.id,
     properties: {
-      "Nombre de tarea": {
+      [propiedades.nombre]: {
         title: [
           {
             text: {
@@ -31,7 +32,7 @@ async function updateEvent(newEvent) {
           name: newEvent.asignatura,
         },
       },
-      Descripcion: {
+      [propiedades.descripcion]: {
         rich_text: [
           {
             text: {
@@ -40,7 +41,7 @@ async function updateEvent(newEvent) {
           },
         ],
       },
-      Fecha: {
+      [propiedades.fecha]: {
         date: {
           start: fromUTCtoLocal(newEvent.date),
           time_zone: "Europe/Madrid",
@@ -74,7 +75,7 @@ async function createEvent(newEvent) {
         emoji: "🔵",
       },
       properties: {
-        "Nombre de tarea": {
+        [propiedades.nombre]: {
           title: [
             {
               text: {
@@ -83,12 +84,12 @@ async function createEvent(newEvent) {
             },
           ],
         },
-        From: {
+        [propiedades.from]: {
           select: {
             name: "CV",
           },
         },
-        Descripcion: {
+        [propiedades.descripcion]: {
           rich_text: [
             {
               text: {
@@ -102,7 +103,7 @@ async function createEvent(newEvent) {
             name: newEvent.asignatura,
           },
         },
-        "cv-id": {
+        [propiedades.cv]: {
           rich_text: [
             {
               text: {
@@ -111,7 +112,7 @@ async function createEvent(newEvent) {
             },
           ],
         },
-        Fecha: {
+        [propiedades.fecha]: {
           date: {
             start: fromUTCtoLocal(newEvent.startDate),
             time_zone: "Europe/Madrid",
@@ -151,13 +152,13 @@ const response = notion.databases.query({
   filter: {
     and: [
       {
-        property: "Fecha",
+        property: propiedades.fecha,
         date: {
           on_or_after: dates.minDate,
         },
       },
       {
-        property: "Fecha",
+        property: propiedades.fecha,
         date: {
           on_or_before: dates.maxDate,
         },
@@ -168,19 +169,20 @@ const response = notion.databases.query({
 response.then(async (res) => {
   const list = res.results
   const fromCV = list.filter((page) => {
-    return page.properties["From"].select?.name == "CV"
+    return page.properties[[propiedades.from]].select?.name == "CV"
   })
   const mappedList = fromCV.map((page) => {
-    const title = page.properties["Nombre de tarea"].title[0].plain_text
+    const title = page.properties[[propiedades.nombre]].title[0].plain_text
     const id = page.id
-    const cv_id = page.properties["cv-id"].rich_text[0]["plain_text"]
-    let date = page.properties["Fecha"].date.start
+    const cv_id = page.properties[[propiedades.cv]].rich_text[0]["plain_text"]
+    let date = page.properties[[propiedades.fecha]].date.start
     date = date.substring(0, date.length - 6) + "Z"
     date = fromLocalToUTC(date).toISOString()
     let descripcion = ""
     let asignatura = ""
     try {
-      descripcion = page.properties["Descripcion"].rich_text[0]["plain_text"]
+      descripcion =
+        page.properties[[propiedades.descripcion]].rich_text[0]["plain_text"]
       asignatura = page.properties["Asignatura"].select.name
     } catch (error) {}
     return { title, id, cv_id, date, descripcion, asignatura }
