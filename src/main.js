@@ -55,7 +55,7 @@ async function updateEvent(newEvent) {
     exec(
       `notify-send -c "notion-event" '<b>Notion - Evento actualizado</b>' '${newEvent.asignatura}\n${newEvent.title}\n${fechaFormateada}'`
     )
-  } catch {}
+  } catch { }
 }
 
 async function createEvent(newEvent) {
@@ -122,11 +122,12 @@ async function createEvent(newEvent) {
     })
 
     const fechaFormateada = new Date(newEvent.startDate).toLocaleString()
+
     try {
       exec(
         `notify-send -c "notion-event" '<b>Notion - Nuevo evento</b>' '${newEvent.asignatura}\n${newEvent.title}\n${fechaFormateada}'`
       )
-    } catch {}
+    } catch { }
   } catch (error) {
     exec(
       `notify-send -c "notion-event" '<b>Notion - Error</b>' 'No se ha podido crear: ${newEvent.title}\n${error.message}'`
@@ -144,7 +145,7 @@ async function deleteEvent(event) {
     exec(
       `notify-send -c "notion-event" '<b>Notion - Evento borrado</b>' '${event.asignatura}\n${event.title}\n${fechaFormateada}'`
     )
-  } catch {}
+  } catch { }
 }
 
 const response = notion.databases.query({
@@ -184,7 +185,7 @@ response.then(async (res) => {
       descripcion =
         page.properties[[propiedades.descripcion]].rich_text[0]["plain_text"]
       asignatura = page.properties["Asignatura"].select.name
-    } catch (error) {}
+    } catch (error) { }
     return { title, id, cv_id, date, descripcion, asignatura }
   })
   let eventsDeleted = mappedList
