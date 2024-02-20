@@ -14,6 +14,8 @@ const asignaturas = {
   AnaDis: "ADA",
   TeoAut: "TALF",
   BasDat: "BD",
+  RedSis: "Redes",
+  SisInt: "SI",
 }
 
 // nombres de las propiedades de la base de datos en notion
@@ -24,6 +26,7 @@ const propiedades = {
   fecha: "Fecha", // fecha
   from: "From", // select (CV?)
   cv: "cv-id", // plan text id de la tarea
+  tipo: "Tipo", // select (Tarea, Examen, etc)
 }
 
 exports.dateRange = dateRange
