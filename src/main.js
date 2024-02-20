@@ -89,6 +89,11 @@ async function createEvent(newEvent) {
             name: "CV",
           },
         },
+        [propiedades.tipo]: {
+          select: {
+            name: "Tarea",
+          },
+        },
         [propiedades.descripcion]: {
           rich_text: [
             {
@@ -98,7 +103,7 @@ async function createEvent(newEvent) {
             },
           ],
         },
-        Asignatura: {
+        [propiedades.asignatura]: {
           select: {
             name: newEvent.asignatura,
           },
