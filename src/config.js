@@ -16,7 +16,8 @@ const asignaturas = {
   BasDat: "BD",
   RedSis: "Redes",
   SisInt: "SI",
-  SisOpe: "SO"
+  SisOpe: "SO",
+  IntIng: "Software"
 }
 
 // nombres de las propiedades de la base de datos en notion
