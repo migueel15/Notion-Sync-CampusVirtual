@@ -17,7 +17,8 @@ const asignaturas = {
   RedSis: "Redes",
   SisInt: "SI",
   SisOpe: "SO",
-  IntIng: "Software"
+  IntIng: "Software",
+  ProSisCon: "Concurrencia"
 }
 
 // nombres de las propiedades de la base de datos en notion
