@@ -1,17 +1,17 @@
 {
-  "name": "notionapi",
-  "version": "1.0.0",
-  "description": "",
-  "main": "/src/main.js",
-  "scripts": {
-    "start": "node src/main.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@notionhq/client": "^2.2.12",
-    "dotenv": "^16.3.1",
-    "ical.js": "^1.5.0"
-  }
+	"name": "notionapi",
+	"version": "1.0.0",
+	"description": "",
+	"main": "/src/main.js",
+	"scripts": {
+		"start": "node src/main.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@notionhq/client": "^2.2.12",
+		"dotenv": "^16.3.1",
+		"ical.js": "^1.5.0"
+	}
 }
