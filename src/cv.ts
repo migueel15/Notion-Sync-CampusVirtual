@@ -1,20 +1,21 @@
-const url = process.env.CALENDAR_URL
-const ics = require("ical.js")
-const { mapAsignatura, getDateRange } = require("./utils")
+import ICAL from "ical.js"
+import { mapAsignatura, getDateRange } from "./utils"
 
-const isInRange = (string) => {
+const url = process.env.CALENDAR_URL || ""
+
+const isInRange = (string: string) => {
 	const datesRange = getDateRange()
 	const date = string
 	return date >= datesRange.minDate && date <= datesRange.maxDate
 }
 
-async function getCvEvents() {
+export async function getCvEvents() {
 	const response = await fetch(url)
 
-	data = await response.text()
-	data = ics.parse(data)
-	events = data[2]
-	let mappedEvents = events.map((event) => {
+	let data = await response.text()
+	let text: any[] = ICAL.parse(data)
+	let events = text[2]
+	let mappedEvents = events.map((event: any) => {
 		const cv_id = event[1][0][3]
 		const title = event[1][1][3]
 		let asignatura = ""
@@ -43,5 +44,3 @@ async function getCvEvents() {
 	mappedEvents = mappedEvents.filter((event) => event !== undefined)
 	return mappedEvents
 }
-
-module.exports = { getCvEvents }

@@ -1,12 +1,14 @@
+import { DateRange, NotionPropertieLabels } from "./types"
+
 // como maximo 60 dias
-const dateRange = {
-	startDate: 2,
-	endDate: 60,
+export const dateRange: DateRange = {
+	startOffset: 2,
+	endOffset: 60,
 }
 
 // mapeo del nombre de las asignaturas
 // Nombre en CV : Nombre Custom Notion
-const asignaturas = {
+export const asignaturas: { [longName: string]: string } = {
 	FunEle: "Electronica",
 	"Cálculo para la Computación": "Calculo",
 	EstDat: "ED",
@@ -22,7 +24,7 @@ const asignaturas = {
 }
 
 // nombres de las propiedades de la base de datos en notion
-const propiedades = {
+export const propiedades: NotionPropertieLabels = {
 	nombre: "Nombre de tarea", // nombre tarea
 	asignatura: "Asignatura", // select de asignaturas
 	descripcion: "Descripcion", // descripcion
@@ -31,7 +33,3 @@ const propiedades = {
 	cv: "cv-id", // plan text id de la tarea
 	tipo: "Tipo", // select (Tarea, Examen, etc)
 }
-
-exports.dateRange = dateRange
-exports.asignaturas = asignaturas
-exports.propiedades = propiedades

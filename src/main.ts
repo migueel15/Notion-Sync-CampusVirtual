@@ -1,13 +1,15 @@
-const { Client } = require("@notionhq/client")
-const path = require("path")
-const dotenv = require("dotenv")
+import { Client } from "@notionhq/client"
+
+import dotenv from "dotenv"
+import path from "path"
 const envPath = path.resolve(__dirname, "../.env")
 dotenv.config({ path: envPath })
-const { getCvEvents } = require("./cv")
-const { exec } = require("child_process")
-const { getDateRange, fromLocalToUTC, fromUTCtoLocal } = require("./utils")
+import { getCvEvents } from "./cv.js"
+
+import { exec } from "child_process"
+import { getDateRange, fromLocalToUTC, fromUTCtoLocal } from "./utils"
 const dates = getDateRange()
-const { propiedades } = require("./config")
+import { propiedades } from "./config"
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY })
 

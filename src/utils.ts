@@ -1,26 +1,25 @@
-const { asignaturas, dateRange } = require("./config")
+import { dateRange, asignaturas } from "./config"
 
-function mapAsignatura(string) {
-	let clave = ""
+export function mapAsignatura(longName: string): string {
 	const claves = Object.keys(asignaturas)
 	for (let i = 0; i < claves.length; i++) {
-		if (string.includes(claves[i])) {
-			clave = claves[i]
+		if (longName.includes(claves[i])) {
+			const clave = claves[i]
 			return asignaturas[clave]
 		}
 	}
-	if (clave === "") return string
+	return longName
 }
 
-function getDateRange() {
+export function getDateRange() {
 	const today = new Date()
 	today.setHours(0, 0, 0, 0)
 
 	const minDate = new Date(today)
-	minDate.setDate(today.getDate() - dateRange.startDate)
+	minDate.setDate(today.getDate() - dateRange.startOffset)
 
 	const maxDate = new Date(today)
-	maxDate.setDate(today.getDate() + dateRange.endDate - 1)
+	maxDate.setDate(today.getDate() + dateRange.endOffset - 1)
 
 	return {
 		minDate: minDate.toISOString(),
@@ -28,18 +27,17 @@ function getDateRange() {
 	}
 }
 
-function fromUTCtoLocal(date) {
+export function fromUTCtoLocal(date) {
 	const timestamp = new Date(date)
 	const offset = (timestamp.getTimezoneOffset() / 60) * -1
 	timestamp.setHours(timestamp.getHours() + offset)
 	return timestamp
 }
 
-function fromLocalToUTC(date) {
+export function fromLocalToUTC(date) {
 	const timestamp = new Date(date)
 	const offset = (timestamp.getTimezoneOffset() / 60) * -1
 	timestamp.setHours(timestamp.getHours() - offset)
 	return timestamp
 }
 
-module.exports = { mapAsignatura, getDateRange, fromUTCtoLocal, fromLocalToUTC }
