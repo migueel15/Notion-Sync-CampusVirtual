@@ -73,6 +73,7 @@ export async function createEvent(evento: Evento) {
 		}
 	})
 	if (response) {
+		console.log("Create event: ", evento.title, " - ", evento.notion_id)
 		createNotification(evento, "CREATED")
 	}
 }
@@ -134,6 +135,7 @@ export function updateEvent(evento: Evento) {
 		}
 	})
 	if (response) {
+		console.log("Updated event: ", evento.title, " - ", evento.notion_id)
 		createNotification(evento, "UPDATED")
 	}
 }
@@ -143,6 +145,7 @@ export function deleteEvent(evento: Evento) {
 		archived: true
 	})
 	if (response) {
+		console.log("Delete event: ", evento.title, " - ", evento.notion_id)
 		createNotification(evento, "DELETED")
 	}
 }
@@ -203,4 +206,5 @@ export function deleteNotionEvents(NotionEvents: Evento[], cvEvents: Evento[]) {
 	eventsToDelete.forEach((event: Evento) => {
 		deleteEvent(event)
 	})
+	console.log("Deleted events: ", eventsToDelete.length)
 }
