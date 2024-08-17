@@ -1,0 +1,24 @@
+name: Docker sync
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: docker login
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      
+    - name: docker build
+      run: |
+        docker build . -t migueel15/notion-sync-cv:latest
+
+    - name: docker push
+      run: |
+        docker push migueel15/notion-sync-cv:latest
