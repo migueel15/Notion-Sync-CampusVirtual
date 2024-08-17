@@ -1,16 +1,21 @@
-export type DateRange = {
+export type DateOffsetRange = {
 	startOffset: number,
 	endOffset: number
+}
+
+export type DateRange = {
+	minDate: string,
+	maxDate: string
 }
 
 export type Evento = {
 	id: string,
 	title: string,
 	description?: string,
-	UTCStart: Date,
-	UTCEnd?: Date,
-	LocalStart: Date,
-	LocalEnd?: Date,
+	UTCStart: string,
+	UTCEnd?: string,
+	LocalStart: string,
+	LocalEnd?: string,
 	subject?: string
 }
 

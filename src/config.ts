@@ -1,7 +1,7 @@
-import { DateRange, NotionPropertieLabels } from "./types"
+import { DateOffsetRange, NotionPropertieLabels } from "./types.js"
 
 // como maximo 60 dias
-export const dateRange: DateRange = {
+export const dateOffsetRange: DateOffsetRange = {
 	startOffset: 2,
 	endOffset: 60,
 }

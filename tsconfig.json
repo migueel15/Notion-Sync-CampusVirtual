@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"target": "ES2020",
+		"sourceMap": true, // para web
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"esModuleInterop": true
+	},
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

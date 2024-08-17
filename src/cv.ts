@@ -1,5 +1,5 @@
 import ICAL from "ical.js"
-import { mapAsignatura, getDateRange } from "./utils"
+import { mapAsignatura, getDateRange } from "./utils.js"
 
 const url = process.env.CALENDAR_URL || ""
 

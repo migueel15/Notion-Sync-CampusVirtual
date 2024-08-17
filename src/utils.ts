@@ -1,4 +1,5 @@
-import { dateRange, asignaturas } from "./config"
+import { dateOffsetRange, asignaturas } from "./config.js"
+import { DateRange } from "./types.js"
 
 export function mapAsignatura(longName: string): string {
 	const claves = Object.keys(asignaturas)
@@ -11,15 +12,15 @@ export function mapAsignatura(longName: string): string {
 	return longName
 }
 
-export function getDateRange() {
+export function getDateRange(): DateRange {
 	const today = new Date()
 	today.setHours(0, 0, 0, 0)
 
 	const minDate = new Date(today)
-	minDate.setDate(today.getDate() - dateRange.startOffset)
+	minDate.setDate(today.getDate() - dateOffsetRange.startOffset)
 
 	const maxDate = new Date(today)
-	maxDate.setDate(today.getDate() + dateRange.endOffset - 1)
+	maxDate.setDate(today.getDate() + dateOffsetRange.endOffset - 1)
 
 	return {
 		minDate: minDate.toISOString(),
@@ -27,17 +28,23 @@ export function getDateRange() {
 	}
 }
 
-export function fromUTCtoLocal(date) {
+export function fromUTCtoLocal(date: string): string {
 	const timestamp = new Date(date)
 	const offset = (timestamp.getTimezoneOffset() / 60) * -1
 	timestamp.setHours(timestamp.getHours() + offset)
-	return timestamp
+	let localDate = timestamp.toISOString()
+	return localDate.substring(0, localDate.length - 5) + "Z"
 }
 
-export function fromLocalToUTC(date) {
+export function fromLocalToUTC(date: string): string {
 	const timestamp = new Date(date)
 	const offset = (timestamp.getTimezoneOffset() / 60) * -1
 	timestamp.setHours(timestamp.getHours() - offset)
-	return timestamp
+	return timestamp.toISOString()
 }
 
+export function fromDateToString(date: Date): string {
+	const timestamp = new Date(date)
+	let stringDate = timestamp.toISOString()
+	return stringDate.substring(0, stringDate.length - 5) + "Z"
+}
