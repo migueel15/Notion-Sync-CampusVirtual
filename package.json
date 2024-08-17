@@ -23,6 +23,7 @@
 		"typescript": "^5.5.4"
 	},
 	"dependencies": {
-		"icalts": "^0.0.2"
+		"icalts": "^0.0.2",
+		"node-notifier": "^10.0.1"
 	}
 }

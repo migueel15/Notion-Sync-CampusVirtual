@@ -1,3 +1,5 @@
+export type State = "CREATED" | "UPDATED" | "DELETED" | "ERROR"
+
 export type DateOffsetRange = {
 	startOffset: number,
 	endOffset: number
@@ -11,12 +13,14 @@ export type DateRange = {
 export type Evento = {
 	id: string,
 	title: string,
+	from: string,
 	description?: string,
 	UTCStart: string,
 	UTCEnd?: string,
 	LocalStart: string,
 	LocalEnd?: string,
-	subject?: string
+	subject?: string,
+	notion_id?: string
 }
 
 export type NotionPropertieLabels = {

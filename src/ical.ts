@@ -45,7 +45,8 @@ export async function getCvEvents() {
 			UTCEnd: fromDateToString(new Date(event[1][7][3])),
 			LocalStart: fromUTCtoLocal(fromDateToString(new Date(event[1][6][3]))),
 			LocalEnd: fromUTCtoLocal(fromDateToString(new Date(event[1][7][3]))),
-			subject: getSubject(event)
+			subject: getSubject(event) || "Sin asignar",
+			from: "CV"
 		}
 	}).filter((event) => event !== undefined)
 	return mappedEvents

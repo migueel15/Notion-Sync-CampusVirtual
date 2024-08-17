@@ -1,8 +1,9 @@
 import { DateOffsetRange, NotionPropertieLabels } from "./types.js"
 
-// como maximo 60 dias
+// startOffset maximo 5 dias
+// endOffset maximo 60 dias
 export const dateOffsetRange: DateOffsetRange = {
-	startOffset: 2,
+	startOffset: 3,
 	endOffset: 60,
 }
 
