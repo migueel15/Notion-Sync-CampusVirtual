@@ -1,29 +1,29 @@
 {
-	"name": "notionts",
-	"version": "1.0.0",
-	"main": "main.js",
-	"type": "module",
-	"module": "nodenext",
-	"scripts": {
-		"build": "tsc",
-		"start": "node dist/main.js",
-		"dev": "nodemon"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"description": "",
-	"devDependencies": {
-		"@notionhq/client": "^2.2.12",
-		"@types/node": "^22.4.0",
-		"dotenv": "^16.3.1",
-		"ical.js": "^1.5.0",
-		"nodemon": "^3.1.4",
-		"ts-node": "^10.9.2",
-		"typescript": "^5.5.4"
-	},
-	"dependencies": {
-		"icalts": "^0.0.2",
-		"node-notifier": "^10.0.1"
-	}
+  "name": "notionts",
+  "version": "1.0.0",
+  "main": "main.js",
+  "type": "module",
+  "module": "nodenext",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/main.js",
+    "dev": "nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@notionhq/client": "^2.2.12",
+    "@types/node": "^22.4.0",
+    "dotenv": "^16.3.1",
+    "ical.js": "^2.0.1",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "icalts": "^0.0.2",
+    "node-notifier": "^10.0.1"
+  }
 }
