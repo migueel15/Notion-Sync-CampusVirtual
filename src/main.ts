@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import { getCvEvents } from "./ical.js"
 import { createEvent, deleteNotionEvents, queryEventsFromNotion, updateEvent } from "./notion.js"
 import { Evento } from "./types.js"
+
 dotenv.config()
 const notion = new Client({ auth: process.env.NOTION_API_KEY })
 
