@@ -27,7 +27,6 @@ const getSubject = (event: string) => {
 		subject = event[1][8][3]
 		subject = mapAsignatura(subject)
 	} catch (error) {
-		throw new Error("Error al obtener la asignatura")
 	}
 	return subject
 }
