@@ -20,9 +20,9 @@ while (true) {
 		if (eventInNotion) {
 			event.notion_id = eventInNotion.notion_id
 			if (eventInNotion.title !== event.title ||
+				eventInNotion.UTCStart !== event.UTCStart ||
+				eventInNotion.UTCEnd !== event.UTCEnd ||
 				eventInNotion.description !== event.description ||
-				eventInNotion.LocalStart !== event.LocalStart ||
-				eventInNotion.LocalEnd !== event.LocalEnd ||
 				eventInNotion.subject !== event.subject) {
 				updateEvent(event)
 			}

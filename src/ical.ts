@@ -49,10 +49,8 @@ export async function getCvEvents() {
 					title: event[1][1][3],
 					id: event[1][0][3],
 					description: formatDescription(event[1][2][3]),
-					UTCStart: fromDateToString(new Date(event[1][6][3])),
-					UTCEnd: fromDateToString(new Date(event[1][7][3])),
-					LocalStart: fromUTCtoLocal(fromDateToString(new Date(event[1][6][3]))),
-					LocalEnd: fromUTCtoLocal(fromDateToString(new Date(event[1][7][3]))),
+					UTCStart: new Date(event[1][6][3]).toISOString(),
+					UTCEnd: new Date(event[1][7][3]).toISOString(),
 					subject: getSubject(event) || "Sin asignar",
 					from: "CV",
 				}

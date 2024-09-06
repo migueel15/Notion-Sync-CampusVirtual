@@ -84,7 +84,7 @@ function notifyCreated(event: Evento) {
 	notifier.notify({
 		title: "Evento creado [" + event.title + "]",
 		message: "Asignatura: " + event.subject + "\n" + new Date(event.UTCStart).toLocaleString() +
-			(differentStartEndDates(event.LocalStart, event.LocalEnd) ? " -> " + new Date(event.UTCEnd).toLocaleString() : ""),
+			(differentStartEndDates(event.UTCStart, event.UTCEnd) ? " -> " + new Date(event.UTCEnd).toLocaleString() : ""),
 		sound: true,
 		timeout: 10,
 		icon: path.join(__dirname, "assets", "notion-logo.svg")
@@ -94,7 +94,7 @@ function notifyUpdated(event: Evento) {
 	notifier.notify({
 		title: "Evento actualizado [" + event.title + "]",
 		message: "Asignatura: " + event.subject + "\n" + new Date(event.UTCStart).toLocaleString() +
-			(differentStartEndDates(event.LocalStart, event.LocalEnd) ? " -> " + new Date(event.UTCEnd).toLocaleString() : ""),
+			(differentStartEndDates(event.UTCStart, event.UTCEnd) ? " -> " + new Date(event.UTCEnd).toLocaleString() : ""),
 		sound: true,
 		timeout: 10,
 		icon: path.join(__dirname, "assets", "notion-logo.svg")
@@ -104,7 +104,7 @@ function notifyDeleted(event: Evento) {
 	notifier.notify({
 		title: "Evento borrado [" + event.title + "]",
 		message: "Asignatura: " + event.subject + "\n" + new Date(event.UTCStart).toLocaleString() +
-			(differentStartEndDates(event.LocalStart, event.LocalEnd) ? " -> " + new Date(event.UTCEnd).toLocaleString() : ""),
+			(differentStartEndDates(event.UTCStart, event.UTCEnd) ? " -> " + new Date(event.UTCEnd).toLocaleString() : ""),
 		sound: true,
 		timeout: 10,
 		icon: path.join(__dirname, "assets", "notion-logo.svg")

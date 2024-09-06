@@ -67,11 +67,10 @@ export async function createEvent(evento: Evento) {
 				},
 				[propiedades.fecha]: {
 					date: {
-						start: evento.LocalStart,
-						end: differentStartEndDates(evento.LocalStart, evento.LocalEnd)
-							? evento.LocalEnd
+						start: evento.UTCStart,
+						end: differentStartEndDates(evento.UTCStart, evento.UTCEnd)
+							? evento.UTCEnd
 							: null,
-						time_zone: "Europe/Madrid",
 					},
 				},
 				[propiedades.cv]: {
@@ -149,11 +148,10 @@ export function updateEvent(evento: Evento) {
 				},
 				[propiedades.fecha]: {
 					date: {
-						start: evento.LocalStart,
-						end: differentStartEndDates(evento.LocalStart, evento.LocalEnd)
-							? evento.LocalEnd
+						start: evento.UTCStart,
+						end: differentStartEndDates(evento.UTCStart, evento.UTCEnd)
+							? evento.UTCEnd
 							: null,
-						time_zone: "Europe/Madrid",
 					},
 				},
 				[propiedades.cv]: {
@@ -247,27 +245,19 @@ export async function queryEventsFromNotion(): Promise<Evento[]> {
 		})
 		if (response) {
 			const NotionEvents: Evento[] = response.results.map((page: any) => {
-				const localStart =
-					page.properties[propiedades.fecha].date.start.substring(
-						0,
-						page.properties[propiedades.fecha].date.start.length - 10
-					) + "Z"
-				const localEnd =
+				const UTCStart = new Date(
+					page.properties[propiedades.fecha].date.start).toISOString()
+				const UTCEnd =
 					page.properties[propiedades.fecha].date.end === null
-						? localStart
-						: page.properties[propiedades.fecha].date.end.substring(
-							0,
-							page.properties[propiedades.fecha].date.end.length - 10
-						) + "Z"
+						? UTCStart
+						: new Date(page.properties[propiedades.fecha].date.end).toISOString()
 				return {
 					id: page.properties[propiedades.cv].rich_text[0].plain_text,
 					title: page.properties[propiedades.nombre].title[0].plain_text,
 					description:
 						page.properties[propiedades.descripcion].rich_text[0].plain_text,
-					UTCStart: fromLocalToUTC(localStart),
-					UTCEnd: fromLocalToUTC(localEnd),
-					LocalStart: localStart,
-					LocalEnd: localEnd,
+					UTCStart,
+					UTCEnd,
 					subject: page.properties[propiedades.asignatura].select.name,
 					from: page.properties[propiedades.from].select.name,
 					notion_id: page.id,

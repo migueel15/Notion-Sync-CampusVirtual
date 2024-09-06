@@ -17,8 +17,6 @@ export type Evento = {
 	description?: string,
 	UTCStart: string,
 	UTCEnd?: string,
-	LocalStart: string,
-	LocalEnd?: string,
 	subject?: string,
 	notion_id?: string
 }
