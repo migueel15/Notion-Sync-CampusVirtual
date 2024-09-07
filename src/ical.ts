@@ -7,6 +7,9 @@ import {
 	mapAsignatura,
 } from "./utils.js"
 
+import dotenv from "dotenv"
+dotenv.config()
+
 const isInRange = (string: string) => {
 	const datesRange = getDateRange()
 	const date = string

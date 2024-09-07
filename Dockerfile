@@ -5,5 +5,8 @@ COPY package.json /app
 RUN npm install
 COPY . /app
 
+RUN apk add --no-cache libnotify dbus dbus-x11
+ENV DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+
 RUN npm run build
 CMD ["npm", "start"]
