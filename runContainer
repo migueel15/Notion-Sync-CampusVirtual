@@ -9,7 +9,7 @@ DBUS_PATH=$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2-)
 docker run -d -it \
 	-v $DBUS_PATH:$DBUS_PATH \
 	--user $(id -u):$(id -g) \
-	--restart unless-stopped \
+	--restart=unless-stopped \
 	-e DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
 	-e CALENDAR_URL=$CALENDAR_URL \
 	-e NOTION_API_KEY=$NOTION_API_KEY \
