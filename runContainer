@@ -7,9 +7,10 @@ NOTION_DATABASE_ID=$(bw get item notion-sync | jq -r ".fields[2].value")
 DBUS_PATH=$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2-)
 
 docker run -d -it \
-	-v $DBUS_PATH:$DBUS_PATH \
+	--name notion-sync-cv \
 	--user $(id -u):$(id -g) \
-	--restart=always \
+	--restart=unless-stopped \
+	-v $DBUS_PATH:$DBUS_PATH \
 	-e DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
 	-e CALENDAR_URL=$CALENDAR_URL \
 	-e NOTION_API_KEY=$NOTION_API_KEY \
