@@ -91,7 +91,7 @@ export async function createEvent(evento: Evento) {
 				" - Created event: ",
 				evento.title,
 				" - ",
-				evento.notion_id
+				evento.notion_id,
 			)
 			createNotification(evento, "CREATED")
 		}
@@ -102,7 +102,7 @@ export async function createEvent(evento: Evento) {
 			" - " +
 			evento.notion_id +
 			"\n" +
-			error
+			error,
 		)
 	}
 }
@@ -172,7 +172,7 @@ export function updateEvent(evento: Evento) {
 				" - Updated event: ",
 				evento.title,
 				" - ",
-				evento.notion_id
+				evento.notion_id,
 			)
 			createNotification(evento, "UPDATED")
 		}
@@ -183,7 +183,7 @@ export function updateEvent(evento: Evento) {
 			" - " +
 			evento.notion_id +
 			"\n" +
-			error
+			error,
 		)
 	}
 }
@@ -200,7 +200,7 @@ export function deleteEvent(evento: Evento) {
 				" - Deleted event: ",
 				evento.title,
 				" - ",
-				evento.notion_id
+				evento.notion_id,
 			)
 			createNotification(evento, "DELETED")
 		}
@@ -211,7 +211,7 @@ export function deleteEvent(evento: Evento) {
 			" - " +
 			evento.notion_id +
 			"\n" +
-			error
+			error,
 		)
 	}
 }
@@ -246,11 +246,14 @@ export async function queryEventsFromNotion(): Promise<Evento[]> {
 		if (response) {
 			const NotionEvents: Evento[] = response.results.map((page: any) => {
 				const UTCStart = new Date(
-					page.properties[propiedades.fecha].date.start).toISOString()
+					page.properties[propiedades.fecha].date.start,
+				).toISOString()
 				const UTCEnd =
 					page.properties[propiedades.fecha].date.end === null
 						? UTCStart
-						: new Date(page.properties[propiedades.fecha].date.end).toISOString()
+						: new Date(
+							page.properties[propiedades.fecha].date.end,
+						).toISOString()
 				return {
 					id: page.properties[propiedades.cv].rich_text[0].plain_text,
 					title: page.properties[propiedades.nombre].title[0].plain_text,
@@ -288,7 +291,7 @@ export function deleteNotionEvents(NotionEvents: Evento[], cvEvents: Evento[]) {
 				"DATE: ",
 				new Date().toISOString(),
 				" - Deleted events: ",
-				eventsToDelete.length
+				eventsToDelete.length,
 			)
 		}
 	} catch (error) {
