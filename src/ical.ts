@@ -29,15 +29,13 @@ const getSubject = (event: string) => {
 	try {
 		subject = event[1][8][3]
 		subject = mapAsignatura(subject)
-	} catch (error) {
-	}
+	} catch (error) { }
 	return subject
 }
 
 export async function getCvEvents() {
 	const CALENDAR_URL = process.env.CALENDAR_URL || ""
 	try {
-
 		const response = await fetch(CALENDAR_URL)
 		let text = await response.text()
 		let data: any[] = ICAL.parse(text)
@@ -48,12 +46,18 @@ export async function getCvEvents() {
 				if (!isInRange(fromDateToString(new Date(event[1][6][3])))) {
 					return undefined
 				}
+
+				let UTCStart = new Date(event[1][6][3])
+				UTCStart.setSeconds(0)
+				let UTCEnd = new Date(event[1][7][3])
+				UTCEnd.setSeconds(0)
+
 				return {
 					title: event[1][1][3],
 					id: event[1][0][3],
 					description: formatDescription(event[1][2][3]),
-					UTCStart: new Date(event[1][6][3]).toISOString(),
-					UTCEnd: new Date(event[1][7][3]).toISOString(),
+					UTCStart: UTCStart.toISOString(),
+					UTCEnd: UTCEnd.toISOString(),
 					subject: getSubject(event) || "Sin asignar",
 					from: "CV",
 				}
@@ -61,6 +65,8 @@ export async function getCvEvents() {
 			.filter((event) => event !== undefined)
 		return mappedEvents
 	} catch (error) {
-		throw new Error("Error al obtener los eventos del calendario, comprueba la URL del calendario")
+		throw new Error(
+			"Error al obtener los eventos del calendario, comprueba la URL del calendario",
+		)
 	}
 }

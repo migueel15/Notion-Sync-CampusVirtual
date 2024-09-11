@@ -26,6 +26,22 @@ while (true) {
 		)
 		if (eventInNotion) {
 			event.notion_id = eventInNotion.notion_id
+
+			if (eventInNotion.title !== event.title) {
+				console.log("Title changed")
+			}
+			if (eventInNotion.UTCStart !== event.UTCStart) {
+				console.log("Start changed")
+			}
+			if (eventInNotion.UTCEnd !== event.UTCEnd) {
+				console.log("End changed")
+			}
+			if (eventInNotion.description !== event.description) {
+				console.log("Description changed")
+			}
+
+			console.log(eventInNotion.UTCStart, event.UTCStart)
+
 			if (
 				eventInNotion.title !== event.title ||
 				eventInNotion.UTCStart !== event.UTCStart ||
