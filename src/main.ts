@@ -30,8 +30,7 @@ while (true) {
 				eventInNotion.title !== event.title ||
 				eventInNotion.UTCStart !== event.UTCStart ||
 				eventInNotion.UTCEnd !== event.UTCEnd ||
-				eventInNotion.description !== event.description ||
-				eventInNotion.subject !== event.subject
+				eventInNotion.description !== event.description
 			) {
 				updateEvent(event)
 			}
