@@ -1,7 +1,7 @@
 import { Client, isFullPage } from "@notionhq/client"
 
 import dotenv from "dotenv"
-import { getCvEvents } from "./ical.js"
+import { getCvEvents } from "./calendar.js"
 import {
 	createEvent,
 	deleteNotionEvents,
