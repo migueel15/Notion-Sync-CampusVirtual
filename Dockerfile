@@ -2,7 +2,8 @@ FROM node:20.16.0-alpine
 WORKDIR /app
 
 COPY package.json /app
-RUN npm install
+COPY package-lock.json /app
+RUN npm ci
 COPY . /app
 
 RUN apk add --no-cache libnotify dbus dbus-x11
