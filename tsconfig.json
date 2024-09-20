@@ -6,7 +6,9 @@
 		"sourceMap": true, // para web
 		"outDir": "./dist",
 		"rootDir": "./src",
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true
 	},
 	"include": [
 		"src/**/*"
