@@ -93,7 +93,7 @@ DBUS_PATH=$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2-)
 docker run -d \
 	--name notion-sync-cv \
 	--user $(id -u):$(id -g) \
-    --pull=always \
+	--pull=always \
 	--restart=unless-stopped \
 	-v $DBUS_PATH:$DBUS_PATH \
 	-e DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
