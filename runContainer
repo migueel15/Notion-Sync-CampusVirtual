@@ -3,19 +3,19 @@
 CALENDAR_URL=$(bw get item notion-sync | jq -r ".fields[0].value")
 NOTION_API_KEY=$(bw get item notion-sync | jq -r ".fields[1].value")
 NOTION_DATABASE_ID=$(bw get item notion-sync | jq -r ".fields[2].value")
-SLEEP_TIME="300"
 
 DBUS_PATH=$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2-)
 
 docker run -d -it \
 	--name notion-sync-cv \
 	--user $(id -u):$(id -g) \
+	--pull=always \
 	--restart=unless-stopped \
 	-v $DBUS_PATH:$DBUS_PATH \
 	-e DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
+	-e TZ=Europe/Madrid \
 	-e CALENDAR_URL=$CALENDAR_URL \
 	-e NOTION_API_KEY=$NOTION_API_KEY \
 	-e NOTION_DATABASE_ID=$NOTION_DATABASE_ID \
-	-e SLEEP_TIME=$SLEEP_TIME \
+	-e SLEEP_TIME="300" \
 	migueel15/notion-sync-cv:latest
-
