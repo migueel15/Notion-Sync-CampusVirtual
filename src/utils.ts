@@ -2,12 +2,12 @@ import path from "path"
 import { dateOffsetRange, asignaturas } from "./config.js"
 import { DateRange, Evento, State } from "./types.js"
 import notifier from "node-notifier"
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { fileURLToPath } from "url"
+import { dirname } from "path"
 
 // Obtener el equivalente a `__dirname`
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.resolve(dirname(__filename), "..");
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.resolve(dirname(__filename), "..")
 
 export function mapAsignatura(longName: string): string {
 	const claves = Object.keys(asignaturas)
@@ -77,45 +77,68 @@ export function createNotification(event: Evento, state: State) {
 		case "ERROR":
 			notifyError(event)
 			break
-
 	}
 }
 function notifyCreated(event: Evento) {
 	notifier.notify({
 		title: "Evento creado [" + event.title + "]",
-		message: "Asignatura: " + event.subject + "\n" + new Date(event.UTCStart).toLocaleString() +
-			(differentStartEndDates(event.UTCStart, event.UTCEnd) ? " -> " + new Date(event.UTCEnd).toLocaleString() : ""),
+		message:
+			"Asignatura: " +
+			event.subject +
+			"\n" +
+			new Date(event.UTCStart).toLocaleString() +
+			(differentStartEndDates(event.UTCStart, event.UTCEnd)
+				? " -> " + new Date(event.UTCEnd).toLocaleString()
+				: ""),
 		sound: true,
 		timeout: 10,
-		icon: path.join(__dirname, "assets", "notion-logo.svg")
+		icon: path.join(__dirname, "assets", "notion-logo.svg"),
 	})
 }
 function notifyUpdated(event: Evento) {
 	notifier.notify({
 		title: "Evento actualizado [" + event.title + "]",
-		message: "Asignatura: " + event.subject + "\n" + new Date(event.UTCStart).toLocaleString() +
-			(differentStartEndDates(event.UTCStart, event.UTCEnd) ? " -> " + new Date(event.UTCEnd).toLocaleString() : ""),
+		message:
+			"Asignatura: " +
+			event.subject +
+			"\n" +
+			new Date(event.UTCStart).toLocaleString() +
+			(differentStartEndDates(event.UTCStart, event.UTCEnd)
+				? " -> " + new Date(event.UTCEnd).toLocaleString()
+				: ""),
 		sound: true,
 		timeout: 10,
-		icon: path.join(__dirname, "assets", "notion-logo.svg")
+		icon: path.join(__dirname, "assets", "notion-logo.svg"),
 	})
 }
 function notifyDeleted(event: Evento) {
 	notifier.notify({
 		title: "Evento borrado [" + event.title + "]",
-		message: "Asignatura: " + event.subject + "\n" + new Date(event.UTCStart).toLocaleString() +
-			(differentStartEndDates(event.UTCStart, event.UTCEnd) ? " -> " + new Date(event.UTCEnd).toLocaleString() : ""),
+		message:
+			"Asignatura: " +
+			event.subject +
+			"\n" +
+			new Date(event.UTCStart).toLocaleString() +
+			(differentStartEndDates(event.UTCStart, event.UTCEnd)
+				? " -> " + new Date(event.UTCEnd).toLocaleString()
+				: ""),
 		sound: true,
 		timeout: 10,
-		icon: path.join(__dirname, "assets", "notion-logo.svg")
+		icon: path.join(__dirname, "assets", "notion-logo.svg"),
 	})
 }
 function notifyError(event: Evento) {
 	notifier.notify({
 		title: "Evento creado [" + event.title + "]",
-		message: "Asignatura: " + event.subject + "\n" + new Date(event.UTCStart).toLocaleString() + " -> " + new Date(event.UTCEnd).toLocaleString(),
+		message:
+			"Asignatura: " +
+			event.subject +
+			"\n" +
+			new Date(event.UTCStart).toLocaleString() +
+			" -> " +
+			new Date(event.UTCEnd).toLocaleString(),
 		sound: true,
 		timeout: 10,
-		icon: path.join(__dirname, "assets", "notion-logo.svg")
+		icon: path.join(__dirname, "assets", "notion-logo.svg"),
 	})
 }

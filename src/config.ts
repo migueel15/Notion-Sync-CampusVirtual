@@ -21,7 +21,7 @@ export const asignaturas: { [longName: string]: string } = {
 	SisInt: "SI",
 	SisOpe: "SO",
 	IntIng: "Software",
-	ProSisCon: "Concurrencia"
+	ProSisCon: "Concurrencia",
 }
 
 // nombres de las propiedades de la base de datos en notion
