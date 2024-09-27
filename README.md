@@ -4,6 +4,7 @@ Sincronización automática entre el campus virtual de la uma y tu base de datos
 
 ## Tabla de contenidos
 
+- [Ejecutar contenedor](#ejecutar-contenedor)
 - [Configurar Notion](#configurar-notion)
 - [Variables de entorno](#variables-de-entorno)
   - [Definición de variables](#definición-de-variables)
@@ -12,7 +13,37 @@ Sincronización automática entre el campus virtual de la uma y tu base de datos
     - [NOTION_API_KEY](#notion_api_key)
     - [NOTION_DATABASE_ID](#notion_database_id)
     - [SLEEP_TIME](#sleep_time)
-- [Ejecutar contenedor](#ejecutar-contenedor)
+
+## Ejecutar contenedor
+
+Se recomienda crear un script para ejecutar el contenedor con las variables de entorno necesarias.
+Si quieres tener una version estable usa --pull=missing. Si quieres tener la última versión de mi github usa --pull=always.
+
+```bash
+# variables (explicadas más abajo)
+CALENDAR_URL="TU_CALENDAR_URL"
+NOTION_API_KEY="TU_NOTION_API_KEY"
+NOTION_DATABASE_ID="TU_NOTION_DATABASE_ID"
+SLEEP_TIME="TU_SLEEP_TIME"
+
+DBUS_PATH=$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2-)
+docker run -d \
+	--name notion-sync-cv \
+	--user $(id -u):$(id -g) \
+	--pull=always \
+	--restart=unless-stopped \
+	-v $DBUS_PATH:$DBUS_PATH \
+	-e DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
+	-e TZ=Europe/Madrid \
+	-e CALENDAR_URL=$CALENDAR_URL \
+	-e NOTION_API_KEY=$NOTION_API_KEY \
+	-e NOTION_DATABASE_ID=$NOTION_DATABASE_ID \
+	-e SLEEP_TIME=$SLEEP_TIME \
+	migueel15/notion-sync-cv:latest
+```
+
+> [!IMPORTANT]
+> Asegurate de que las variables del script superior sean correctas y estén entre comillas
 
 ## Configurar Notion
 
@@ -56,15 +87,12 @@ Para ello sigue estos pasos:
 - Añade una foto si lo deseas y haz click en "Guardar"
 - Accede a la integración, muestra el token y copialo
 
-> Ese token será tu NOTION_API_KEY.
+> [!IMPORTANTE]
+> Tienes el token de acceso, pero aún tienes que darle permisos a la integración para que pueda modificar una página en Notion.
 
 Una vez creada la integración, debes elegir la página que se podra modificar con esta.
-Para ello, entra en Notion y accede a la página que quieras sincronizar.
-
-Ve a "..." (parte superior derecha de la pantalla) > "Conectar con" > "nombre de tu integración"
-
-> [!IMPORTANTE]
-> Se tendrá acceso tanto a la página que vincules la integración como a las subpáginas de esta.
+Para ello, entra en Notion y accede a la página que quieras sincronizar (tu base de datos).
+**Ve a "..." (parte superior derecha de la pantalla) > "Conectar con" > "nombre de tu integración"**
 
 #### NOTION_DATABASE_ID
 
@@ -82,25 +110,3 @@ Copia la sección NOTION_DATABASE_ID de la URL.
 
 El sleeptime es el tiempo de espera entre sincronizaciones en segundos. Lo decides tú. Ten en cuenta que si pones un tiempo muy corto, notion puede bloquear tu cuenta.
 No se recomienda poner un tiempo menor a 300 segundos(5 minutos).
-
-## Ejecutar contenedor
-
-Se recomienda crear un script para ejecutar el contenedor con las variables de entorno necesarias.
-Si quieres tener una version estable usa --pull=missing. Si quieres tener la última versión de mi github usa --pull=always.
-
-```bash
-DBUS_PATH=$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2-)
-docker run -d \
-	--name notion-sync-cv \
-	--user $(id -u):$(id -g) \
-	--pull=always \
-	--restart=unless-stopped \
-	-v $DBUS_PATH:$DBUS_PATH \
-	-e DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS \
-	-e TZ=Europe/Madrid \
-	-e CALENDAR_URL=TU_CALENDAR_URL \
-	-e NOTION_API_KEY=TU_NOTION_API_KEY \
-	-e NOTION_DATABASE_ID=TU_NOTION_DATABASE_ID \
-	-e SLEEP_TIME=TU_SLEEP_TIME \
-	migueel15/notion-sync-cv:latest
-```
