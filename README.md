@@ -2,6 +2,8 @@
 
 Sincronización automática entre el campus virtual de la uma y tu base de datos en notion.
 
+Necesitas tener [docker](https://www.docker.com/) instalado en tu ordenador.
+
 ## Tabla de contenidos
 
 - [Ejecutar contenedor](#ejecutar-contenedor)
