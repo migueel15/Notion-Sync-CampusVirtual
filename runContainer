@@ -6,6 +6,10 @@ NOTION_DATABASE_ID=$(bw get item notion-sync | jq -r ".fields[2].value")
 
 DBUS_PATH=$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2-)
 
+
+docker stop notion-sync-cv
+docker rm notion-sync-cv
+
 docker run -d -it \
 	--name notion-sync-cv \
 	--user $(id -u):$(id -g) \
