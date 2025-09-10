@@ -33,8 +33,8 @@ const getSubject = (event: string) => {
 	return subject
 }
 
-export async function getCvEvents() {
-	const CALENDAR_URL = process.env.CALENDAR_URL || ""
+export async function getCvEvents(calendarUrl?: string) {
+	const CALENDAR_URL = calendarUrl || process.env.CALENDAR_URL || ""
 	try {
 		const response = await fetch(CALENDAR_URL)
 		let text = await response.text()

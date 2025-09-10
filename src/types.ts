@@ -30,3 +30,9 @@ export type NotionPropertieLabels = {
 	cv: string
 	tipo: string
 }
+
+export type UserData = {
+	notionapikey: string
+	notiondatabaseid: string
+	calendarurl: string
+}

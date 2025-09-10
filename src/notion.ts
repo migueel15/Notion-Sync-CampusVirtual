@@ -1,30 +1,24 @@
 import { Client } from "@notionhq/client";
 import dotenv from "dotenv";
-import { Evento } from "./types.js";
+import { Evento, UserData } from "./types.js";
 import { propiedades } from "./config.js";
 import {
   createNotification,
   differentStartEndDates,
-  fromLocalToUTC,
   fromUTCtoLocal,
   getDateRange,
 } from "./utils.js";
-import { resolve } from "path";
+import { withRetry } from "./utils/retry.js";
 
 dotenv.config();
 
-let notion: Client;
-try {
-  notion = new Client({ auth: process.env.NOTION_API_KEY });
-} catch (error) {
-  throw new Error("Error initializing Notion client. Comprueba tu token.");
-}
-
-export async function createEvent(evento: Evento) {
-  try {
+export async function createEvent(evento: Evento, userData: UserData) {
+  const notion = new Client({ auth: userData.notionapikey });
+  
+  return withRetry(async () => {
     const response = await notion.pages.create({
       parent: {
-        database_id: process.env.NOTION_DATABASE_ID,
+        database_id: userData.notiondatabaseid,
       },
       icon: {
         type: "emoji",
@@ -97,20 +91,13 @@ export async function createEvent(evento: Evento) {
       );
       createNotification(evento, "CREATED");
     }
-  } catch (error) {
-    throw new Error(
-      "Error creating event: " +
-      evento.title +
-      " - " +
-      evento.notion_id +
-      "\n" +
-      error,
-    );
-  }
+  });
 }
-export function updateEvent(evento: Evento) {
-  try {
-    const response = notion.pages.update({
+export async function updateEvent(evento: Evento, userData: UserData) {
+  const notion = new Client({ auth: userData.notionapikey });
+  
+  return withRetry(async () => {
+    const response = await notion.pages.update({
       page_id: evento.notion_id,
       properties: {
         [propiedades.nombre]: {
@@ -179,20 +166,13 @@ export function updateEvent(evento: Evento) {
       );
       createNotification(evento, "UPDATED");
     }
-  } catch (error) {
-    throw new Error(
-      "Error updating event: " +
-      evento.title +
-      " - " +
-      evento.notion_id +
-      "\n" +
-      error,
-    );
-  }
+  });
 }
-export function deleteEvent(evento: Evento) {
-  try {
-    const response = notion.pages.update({
+export async function deleteEvent(evento: Evento, userData: UserData) {
+  const notion = new Client({ auth: userData.notionapikey });
+  
+  return withRetry(async () => {
+    const response = await notion.pages.update({
       page_id: evento.notion_id,
       archived: true,
     });
@@ -207,22 +187,14 @@ export function deleteEvent(evento: Evento) {
       );
       createNotification(evento, "DELETED");
     }
-  } catch (error) {
-    throw new Error(
-      "Error deleting event: " +
-      evento.title +
-      " - " +
-      evento.notion_id +
-      "\n" +
-      error,
-    );
-  }
+  });
 }
 
-export async function queryEventsFromNotion(): Promise<Evento[]> {
+export async function queryEventsFromNotion(userData: UserData): Promise<Evento[]> {
+  const notion = new Client({ auth: userData.notionapikey });
   try {
     const response = await notion.databases.query({
-      database_id: process.env.NOTION_DATABASE_ID,
+      database_id: userData.notiondatabaseid,
       filter: {
         and: [
           {
@@ -278,7 +250,7 @@ export async function queryEventsFromNotion(): Promise<Evento[]> {
 }
 
 // delete events from Notion that are not in the CV
-export function deleteNotionEvents(NotionEvents: Evento[], cvEvents: Evento[]) {
+export async function deleteNotionEvents(NotionEvents: Evento[], cvEvents: Evento[], userData: UserData) {
   try {
     const eventsToDelete = NotionEvents.filter((notionEvent) => {
       return (
@@ -286,9 +258,11 @@ export function deleteNotionEvents(NotionEvents: Evento[], cvEvents: Evento[]) {
         cvEvents.find((cvEvent) => cvEvent.id === notionEvent.id)?.id
       );
     });
-    eventsToDelete.forEach((event: Evento) => {
-      deleteEvent(event);
-    });
+    
+    for (const event of eventsToDelete) {
+      await deleteEvent(event, userData);
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
     if (eventsToDelete.length > 0) {
       console.log(
         "DATE: ",
