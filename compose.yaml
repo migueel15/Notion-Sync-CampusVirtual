@@ -13,6 +13,5 @@ services:
       - NOTION_DATABASE_ID=${NOTION_DATABASE_ID}
       - SLEEP_TIME=${SLEEP_TIME}
       # - DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}
-    volumes:
-      - ${USERS_JSON_PATH:-./src/users.json}:/app/src/users.json:ro
+    # volumes:
       # - ${DBUS_PATH}:${DBUS_PATH}
