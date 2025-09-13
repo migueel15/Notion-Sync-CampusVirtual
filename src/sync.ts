@@ -21,7 +21,7 @@ export async function syncUser(userData: UserData): Promise<void> {
 
 			try {
 				if (eventInNotion) {
-					event.id = eventInNotion.notion_id
+					(event as any).notion_id = eventInNotion.notion_id
 
 					if (
 						eventInNotion.title !== event.title ||
