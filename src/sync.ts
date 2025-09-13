@@ -18,10 +18,10 @@ export async function syncUser(userData: UserData): Promise<void> {
 			const eventInNotion = NotionEvents.find(
 				(notionEvent) => notionEvent.id === event.id,
 			)
-			
+
 			try {
 				if (eventInNotion) {
-					event.notion_id = eventInNotion.notion_id
+					event.id = eventInNotion.notion_id
 
 					if (
 						eventInNotion.title !== event.title ||
