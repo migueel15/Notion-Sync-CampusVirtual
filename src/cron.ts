@@ -3,12 +3,15 @@ import fs from 'fs'
 import path from 'path'
 import { UserData } from './types.js'
 
-const USERS_FILE = path.join(process.cwd(), 'src/users.json')
+// const USERS_FILE = path.join(process.cwd(), 'src/users.json')
+const USERS_CONFIG_DIR = process.env.CONFIG_PATH || '/config'
+const USERS_FILE = `${USERS_CONFIG_DIR}/users.json`
 const API_ENDPOINT = process.env.API_ENDPOINT || 'http://localhost:3000/sync-user'
 
 function loadUsers(): UserData[] {
 	try {
 		const data = fs.readFileSync(USERS_FILE, 'utf-8')
+		console.log(JSON.parse(data).length)
 		return JSON.parse(data)
 	} catch (error) {
 		console.error('Error loading users.json:', error)
@@ -18,7 +21,7 @@ function loadUsers(): UserData[] {
 
 async function syncAllUsers() {
 	const users = loadUsers()
-	
+
 	if (users.length === 0) {
 		console.log('No users found in users.json')
 		return

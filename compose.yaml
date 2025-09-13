@@ -8,10 +8,7 @@ services:
     restart: unless-stopped
     environment:
       - TZ=Europe/Madrid
-      - CALENDAR_URL=${CALENDAR_URL}
-      - NOTION_API_KEY=${NOTION_API_KEY}
-      - NOTION_DATABASE_ID=${NOTION_DATABASE_ID}
       - SLEEP_TIME=${SLEEP_TIME}
-      # - DBUS_SESSION_BUS_ADDRESS=${DBUS_SESSION_BUS_ADDRESS}
-    # volumes:
-      # - ${DBUS_PATH}:${DBUS_PATH}
+      - CONFIG_PATH=${CONFIG_PATH}
+    volumes:
+      - ${HOST_CONFIG_PATH}:${CONFIG_PATH}
