@@ -1,5 +1,4 @@
 import ICAL from "ical.js"
-import { Evento } from "./types.js"
 import {
 	fromDateToString,
 	fromUTCtoLocal,
@@ -24,11 +23,10 @@ const formatDescription = (description: string) => {
 	return description
 }
 
-const getSubject = (event: string) => {
-	let subject = ""
+const getSubject = (subject: string) => {
+	if (!subject) return ""
 	try {
-		subject = event[1][8][3]
-		subject = mapAsignatura(subject)
+		return mapAsignatura(subject)
 	} catch (error) { }
 	return subject
 }
@@ -36,33 +34,38 @@ const getSubject = (event: string) => {
 export async function getCvEvents(calendarUrl?: string) {
 	const CALENDAR_URL = calendarUrl || process.env.CALENDAR_URL || ""
 	try {
-		const response = await fetch(CALENDAR_URL)
-		let text = await response.text()
-		let data: any[] = ICAL.parse(text)
-		let events: string[] = data[2]
+		const res = await fetch(CALENDAR_URL)
+		const data = await res.text()
 
-		let mappedEvents: Evento[] = events
-			.map((event: any) => {
-				if (!isInRange(fromDateToString(new Date(event[1][6][3])))) {
-					return undefined
-				}
+		const parsedData = ICAL.parse(data)
+		const calendar = new ICAL.Component(parsedData)
 
-				let UTCStart = new Date(event[1][6][3])
-				UTCStart.setSeconds(0)
-				let UTCEnd = new Date(event[1][7][3])
-				UTCEnd.setSeconds(0)
+		const events = calendar.getAllSubcomponents("vevent")
 
-				return {
-					title: event[1][1][3],
-					id: event[1][0][3],
-					description: formatDescription(event[1][2][3]) || "",
-					UTCStart: UTCStart.toISOString(),
-					UTCEnd: UTCEnd.toISOString(),
-					subject: getSubject(event) || "Sin asignar",
-					from: "CV",
-				}
-			})
-			.filter((event) => event !== undefined)
+		const mappedEvents = events.map((event) => {
+			const id = event.getFirstProperty("uid")?.getFirstValue() as string
+			const title = event.getFirstProperty("summary")?.getFirstValue() as string
+			const description = event.getFirstProperty("description")?.getFirstValue() as string
+			const startDateObject = event.getFirstProperty("dtstart")?.getFirstValue() as ICAL.Time
+			const endDateObject = event.getFirstProperty("dtend")?.getFirstValue() as ICAL.Time
+			const startDate = startDateObject.toJSDate()
+			const endDate = endDateObject.toJSDate()
+			const subject = event.getFirstProperty("categories")?.getFirstValue() as string
+
+			if (isInRange(fromDateToString(startDate))) {
+				return undefined
+			}
+
+			return {
+				title,
+				id,
+				description: formatDescription(description) || "",
+				UTCStart: startDate.toISOString(),
+				UTCEnd: endDate.toISOString(),
+				subject: getSubject(subject) || "Sin asignar",
+				from: "CV",
+			}
+		}).filter((e) => e !== undefined)
 		return mappedEvents
 	} catch (error) {
 		throw new Error(
