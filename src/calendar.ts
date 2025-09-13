@@ -52,7 +52,7 @@ export async function getCvEvents(calendarUrl?: string) {
 			const endDate = endDateObject.toJSDate()
 			const subject = event.getFirstProperty("categories")?.getFirstValue() as string
 
-			if (isInRange(fromDateToString(startDate))) {
+			if (!isInRange(fromDateToString(startDate))) {
 				return undefined
 			}
 
