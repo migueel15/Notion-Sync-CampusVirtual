@@ -18,7 +18,7 @@ export const asignaturas: { [longName: string]: string } = {
 	TeoAut: "TALF",
 	BasDat: "BD",
 	RedSis: "Redes",
-	IngSisIntDat: "Big Data!",
+	IngSisIntDat: "Big Data",
 	SisOpe: "SO",
 	IntIng: "Software",
 	ProSisCon: "Concurrencia",
