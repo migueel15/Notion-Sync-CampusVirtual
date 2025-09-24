@@ -27,7 +27,8 @@ export async function syncUser(userData: UserData): Promise<void> {
 						eventInNotion.title !== event.title ||
 						eventInNotion.UTCStart !== event.UTCStart ||
 						eventInNotion.UTCEnd !== event.UTCEnd ||
-						eventInNotion.description !== event.description
+						eventInNotion.description !== event.description ||
+						eventInNotion.subject !== event.subject
 					) {
 						await updateEvent(event, userData)
 					}
