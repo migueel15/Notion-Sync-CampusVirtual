@@ -10,6 +10,7 @@ export const dateOffsetRange: DateOffsetRange = {
 // mapeo del nombre de las asignaturas
 // Nombre en CV : Nombre Custom Notion
 export const asignaturas: { [longName: string]: string } = {
+	TeoInfCod: "TIC",
 	FunEle: "Electronica",
 	"Cálculo para la Computación": "Calculo",
 	EstDat: "ED",
