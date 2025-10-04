@@ -56,6 +56,20 @@ export async function getCvEvents(calendarUrl?: string) {
 				return undefined
 			}
 
+			// BORRAR EN FUTURO - Provisional para electronica
+			if (title.startsWith("FE-") && getSubject(subject) === "Electronica") {
+				const newEndDate = new Date(startDate.getTime() + 105 * 60 * 1000) // 1h 45min = 105 minutos
+				return {
+					title,
+					id,
+					description: formatDescription(description) || "",
+					UTCStart: startDate.toISOString(),
+					UTCEnd: newEndDate.toISOString(),
+					subject: getSubject(subject) || "Sin asignar",
+					from: "CV",
+				}
+			}
+
 			return {
 				title,
 				id,
