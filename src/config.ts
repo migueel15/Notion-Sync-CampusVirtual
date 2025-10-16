@@ -32,6 +32,7 @@ export const asignaturas: { [longName: string]: string } = {
 	ManPruSof: "Mantenimiento",
 	IntUsu: "Interfaces",
 	SegSer: "Seguridad",
+	DesSofCri: "Soft. Critico"
 };
 
 // nombres de las propiedades de la base de datos en notion
