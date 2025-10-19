@@ -70,6 +70,19 @@ export async function getCvEvents(calendarUrl?: string) {
 				}
 			}
 
+if (startDate === endDate) {
+				const newStartDate = new Date(startDate.getTime() - 60 * 60 * 1000) // 1h = 60 minutos
+				return {
+					title,
+					id,
+					description: formatDescription(description) || "",
+					UTCStart: newStartDate.toISOString(),
+					UTCEnd: endDate.toISOString(),
+					subject: getSubject(subject) || "Sin asignar",
+					from: "CV",
+				}
+			}
+
 			return {
 				title,
 				id,
