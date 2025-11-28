@@ -1,6 +1,7 @@
 import express from 'express'
 import { syncUser } from './sync.js'
 import { UserData } from './types.js'
+import { logError, logInfo } from './logger.js'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -8,8 +9,10 @@ const PORT = process.env.PORT || 3000
 app.use(express.json())
 
 app.post('/sync-user', async (req, res) => {
+	let userData: UserData | undefined
+
 	try {
-		const userData: UserData = req.body
+		userData = req.body
 
 		if (!userData.notionapikey || !userData.notiondatabaseid || !userData.calendarurl) {
 			return res.status(400).json({ 
@@ -24,8 +27,9 @@ app.post('/sync-user', async (req, res) => {
 			message: 'User sync completed successfully',
 			database: userData.notiondatabaseid
 		})
+		logInfo('User sync completed via API', { context: 'api', databaseId: userData.notiondatabaseid })
 	} catch (error) {
-		console.error('Error in sync-user endpoint:', error)
+		logError('Error in sync-user endpoint', { context: 'api', databaseId: userData?.notiondatabaseid, error })
 		res.status(500).json({ 
 			error: 'Internal server error', 
 			details: error instanceof Error ? error.message : 'Unknown error'
@@ -38,7 +42,7 @@ app.get('/health', (req, res) => {
 })
 
 app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`)
+	logInfo('Server running', { context: 'api', port: PORT })
 })
 
 export default app

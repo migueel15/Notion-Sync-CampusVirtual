@@ -1,7 +1,7 @@
 import './server.js'
 import './cron.js'
-import { syncAllUsers } from './cron.js'
+import { logInfo } from './logger.js'
 
-console.log('🚀 Notion Sync Multi-User Server Started')
-console.log('📡 API Server running with /sync-user endpoint')
-console.log('⏰ Cron jobs scheduled for automatic syncing')
+logInfo('Notion Sync Multi-User Server Started', { context: 'bootstrap' })
+logInfo('API Server running with /sync-user endpoint', { context: 'bootstrap' })
+logInfo('Cron jobs scheduled for automatic syncing', { context: 'bootstrap' })

@@ -9,6 +9,7 @@ import {
   getDateRange,
 } from "./utils.js";
 import { withRetry } from "./utils/retry.js";
+import { logError, logInfo } from "./logger.js";
 
 dotenv.config();
 
@@ -81,14 +82,13 @@ export async function createEvent(evento: Evento, userData: UserData) {
       },
     });
     if (response) {
-      console.log(
-        "DATE: ",
-        new Date().toISOString(),
-        " - Created event: ",
-        evento.title,
-        " - ",
-        evento.notion_id,
-      );
+      logInfo("Created event in Notion", {
+        context: "notion",
+        databaseId: userData.notiondatabaseid,
+        eventId: evento.id,
+        eventTitle: evento.title,
+        notionId: response.id
+      });
       createNotification(evento, "CREATED");
     }
   });
@@ -156,14 +156,13 @@ export async function updateEvent(evento: Evento, userData: UserData) {
       },
     });
     if (response) {
-      console.log(
-        "DATE: ",
-        new Date().toISOString(),
-        " - Updated event: ",
-        evento.title,
-        " - ",
-        evento.notion_id,
-      );
+      logInfo("Updated event in Notion", {
+        context: "notion",
+        databaseId: userData.notiondatabaseid,
+        eventId: evento.id,
+        eventTitle: evento.title,
+        notionId: evento.notion_id
+      });
       createNotification(evento, "UPDATED");
     }
   });
@@ -177,14 +176,13 @@ export async function deleteEvent(evento: Evento, userData: UserData) {
       archived: true,
     });
     if (response) {
-      console.log(
-        "DATE: ",
-        new Date().toISOString(),
-        " - Deleted event: ",
-        evento.title,
-        " - ",
-        evento.notion_id,
-      );
+      logInfo("Deleted event in Notion", {
+        context: "notion",
+        databaseId: userData.notiondatabaseid,
+        eventId: evento.id,
+        eventTitle: evento.title,
+        notionId: evento.notion_id
+      });
       createNotification(evento, "DELETED");
     }
   });
@@ -264,14 +262,13 @@ export async function deleteNotionEvents(NotionEvents: Evento[], cvEvents: Event
       await new Promise(resolve => setTimeout(resolve, 100));
     }
     if (eventsToDelete.length > 0) {
-      console.log(
-        "DATE: ",
-        new Date().toISOString(),
-        " - Deleted events: ",
-        eventsToDelete.length,
-      );
+      logInfo("Deleted orphaned Notion events", {
+        context: "notion",
+        databaseId: userData.notiondatabaseid,
+        deletedCount: eventsToDelete.length
+      });
     }
   } catch (error) {
-    console.error("Error deleting events from Notion: ", error);
+    logError("Error deleting events from Notion", { context: "notion", databaseId: userData.notiondatabaseid, error });
   }
 }
