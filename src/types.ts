@@ -11,10 +11,10 @@ export type DateRange = {
 }
 
 export type Evento = {
-	id: string
-	title: string
-	from: string
-	description?: string
+        id: string
+        title: string
+        from: string
+        description?: string
 	UTCStart: string
 	UTCEnd?: string
 	subject?: string
@@ -32,7 +32,54 @@ export type NotionPropertieLabels = {
 }
 
 export type UserData = {
-	notionapikey: string
-	notiondatabaseid: string
-	calendarurl: string
+        notionapikey: string
+        notiondatabaseid: string
+        calendarurl: string
+}
+
+export type AuthProvider = 'google' | 'notion'
+
+export type AuthSession = {
+        id: string
+        provider: AuthProvider
+        email?: string
+        googleAccessToken?: string
+        notionApiKey?: string
+        notionDatabaseId?: string
+        createdAt: string
+}
+
+export type GoogleAuthPayload = {
+        provider: 'google'
+        email: string
+        googleAccessToken: string
+}
+
+export type NotionAuthPayload = {
+        provider: 'notion'
+        notionApiKey: string
+        notionDatabaseId: string
+        email?: string
+}
+
+export type SyncDestination = 'notion' | 'google-calendar'
+
+export type SyncRequest = {
+        name: string
+        icsUrl: string
+        destination: SyncDestination
+        notionDatabaseId?: string
+        googleCalendarId?: string
+}
+
+export type SyncConfig = {
+        id: string
+        ownerSessionId: string
+        name: string
+        icsUrl: string
+        destination: SyncDestination
+        notionDatabaseId?: string
+        googleCalendarId?: string
+        createdAt: string
+        lastRunAt?: string
 }

@@ -3,6 +3,16 @@
 Sincronización automática entre el campus virtual de la uma y tu base de datos en notion.
 Necesitas tener [docker](https://www.docker.com/) instalado en tu ordenador.
 
+## API web para sincronización multiusuario
+
+El servidor ahora expone un flujo básico para construir una aplicación web en la que los usuarios puedan:
+
+1. Autenticarse con Google o con Notion mediante `POST /auth/login` enviando el proveedor y las credenciales correspondientes.
+2. Registrar URLs ICS a sincronizar con Google Calendar o Notion con `POST /sync-configs` (requiere cabecera `x-session-id`).
+3. Consultar sus configuraciones con `GET /sync-configs` y lanzar una sincronización puntual con `POST /sync-configs/:id/run`.
+
+> Estos endpoints mantienen las credenciales en memoria para prototipar la experiencia web; en producción se debería almacenar la sesión en una base de datos segura y completar el flujo de OAuth de Google.
+
 ## Tabla de contenidos
 
 - [Ejecutar contenedor](#ejecutar-contenedor)
