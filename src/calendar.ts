@@ -9,7 +9,7 @@ import {
 import dotenv from "dotenv";
 dotenv.config();
 
-const isInRange = (string: string) => {
+export const isInRange = (string: string) => {
   const datesRange = getDateRange();
   const date = string;
   return date >= datesRange.minDate && date <= datesRange.maxDate;
