@@ -34,7 +34,10 @@ const getSubject = (subject: string) => {
 export async function getCvEvents(calendarUrl?: string) {
   const CALENDAR_URL = calendarUrl || process.env.CALENDAR_URL || "";
   try {
-    const res = await fetch(CALENDAR_URL);
+    // Sin User-Agent explicito el campus responde con una pagina de captcha
+    const res = await fetch(CALENDAR_URL, {
+      headers: { "User-Agent": "NotionSyncCV/1.0" },
+    });
     const data = await res.text();
 
     const parsedData = ICAL.parse(data);
