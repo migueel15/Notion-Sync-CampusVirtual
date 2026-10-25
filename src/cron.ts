@@ -1,4 +1,3 @@
-import cron from 'node-cron'
 import fs from 'fs'
 import { UserData } from './types.js'
 import { logError, logInfo } from './logger.js'
@@ -55,13 +54,25 @@ async function syncAllUsers() {
 	logInfo('Sync batch completed', { context: 'cron', userCount: users.length })
 }
 
-cron.schedule('*/5 * * * *', () => {
-	logInfo('Running scheduled sync', { context: 'cron' })
-	syncAllUsers()
-}, {
-	timezone: "Europe/Madrid"
-})
+// Intervalo fijo en lugar de node-cron: su calculo de la siguiente ejecucion con
+// zona horaria falla en el cambio de hora y dispara la tarea en bucle
+const SYNC_INTERVAL_MS = 5 * 60 * 1000
+let syncRunning = false
 
-logInfo('Cron job scheduled to run every 5 minutes', { context: 'cron', schedule: '*/5 * * * *', timezone: 'Europe/Madrid' })
+setInterval(async () => {
+	if (syncRunning) {
+		logInfo('Previous sync still running, skipping scheduled sync', { context: 'cron' })
+		return
+	}
+	syncRunning = true
+	try {
+		logInfo('Running scheduled sync', { context: 'cron' })
+		await syncAllUsers()
+	} finally {
+		syncRunning = false
+	}
+}, SYNC_INTERVAL_MS)
+
+logInfo('Sync scheduled to run every 5 minutes', { context: 'cron', intervalMs: SYNC_INTERVAL_MS })
 
 export { syncAllUsers }
