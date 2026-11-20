@@ -24,11 +24,10 @@ const formatDescription = (description: string) => {
 };
 
 const getSubject = (subject: string) => {
-  if (!subject) return "";
-  try {
-    return mapAsignatura(subject);
-  } catch (error) {}
-  return subject;
+  if (!subject) return "Sin asignar";
+  const mappedSubject = mapAsignatura(subject) || "Sin asignar";
+  // Notion does not allow commas in select option names.
+  return mappedSubject.replace(/,[ \t]*/g, " · ");
 };
 
 export async function getCvEvents(calendarUrl?: string) {
@@ -70,8 +69,10 @@ export async function getCvEvents(calendarUrl?: string) {
           return undefined;
         }
 
+        const notionSubject = getSubject(subject);
+
         // BORRAR EN FUTURO - Provisional para electronica
-        if (title.startsWith("FE-") && getSubject(subject) === "Electronica") {
+        if (title.startsWith("FE-") && notionSubject === "Electronica") {
           const newEndDate = new Date(startDate.getTime() + 105 * 60 * 1000); // 1h 45min = 105 minutos
           return {
             title,
@@ -79,7 +80,7 @@ export async function getCvEvents(calendarUrl?: string) {
             description: formatDescription(description) || "",
             UTCStart: startDate.toISOString(),
             UTCEnd: newEndDate.toISOString(),
-            subject: getSubject(subject) || "Sin asignar",
+            subject: notionSubject,
             from: "CV",
           };
         }
@@ -92,7 +93,7 @@ export async function getCvEvents(calendarUrl?: string) {
             description: formatDescription(description) || "",
             UTCStart: newStartDate.toISOString(),
             UTCEnd: endDate.toISOString(),
-            subject: getSubject(subject) || "Sin asignar",
+            subject: notionSubject,
             from: "CV",
           };
         }
@@ -103,7 +104,7 @@ export async function getCvEvents(calendarUrl?: string) {
           description: formatDescription(description) || "",
           UTCStart: startDate.toISOString(),
           UTCEnd: endDate.toISOString(),
-          subject: getSubject(subject) || "Sin asignar",
+          subject: notionSubject,
           from: "CV",
         };
       })

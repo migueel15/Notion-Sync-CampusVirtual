@@ -249,26 +249,34 @@ export async function queryEventsFromNotion(userData: UserData): Promise<Evento[
 
 // delete events from Notion that are not in the CV
 export async function deleteNotionEvents(NotionEvents: Evento[], cvEvents: Evento[], userData: UserData) {
-  try {
-    const eventsToDelete = NotionEvents.filter((notionEvent) => {
-      return (
-        notionEvent.id !==
-        cvEvents.find((cvEvent) => cvEvent.id === notionEvent.id)?.id
-      );
-    });
-    
-    for (const event of eventsToDelete) {
+  const eventsToDelete = NotionEvents.filter(
+    (notionEvent) => !cvEvents.some((cvEvent) => cvEvent.id === notionEvent.id),
+  );
+  let deletedCount = 0;
+  let failedCount = 0;
+
+  for (const event of eventsToDelete) {
+    try {
       await deleteEvent(event, userData);
-      await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    if (eventsToDelete.length > 0) {
-      logInfo("Deleted orphaned Notion events", {
+      deletedCount++;
+    } catch (error) {
+      failedCount++;
+      logError("Error deleting event from Notion", {
         context: "notion",
         databaseId: userData.notiondatabaseid,
-        deletedCount: eventsToDelete.length
+        eventId: event.id,
+        error,
       });
     }
-  } catch (error) {
-    logError("Error deleting events from Notion", { context: "notion", databaseId: userData.notiondatabaseid, error });
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
+
+  if (deletedCount > 0) {
+    logInfo("Deleted orphaned Notion events", {
+      context: "notion",
+      databaseId: userData.notiondatabaseid,
+      deletedCount,
+    });
+  }
+  return { deletedCount, failedCount };
 }
