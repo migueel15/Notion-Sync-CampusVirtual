@@ -5,10 +5,14 @@ import {
   queryEventsFromNotion,
   updateEvent,
 } from "./notion.js";
-import { Evento, UserData } from "./types.js";
-import { logError, logInfo } from "./logger.js";
+import { UserData } from "./types.js";
+import { logError, logInfo, logWarn } from "./logger.js";
 
-export async function syncUser(userData: UserData): Promise<void> {
+export async function syncUser(userData: UserData) {
+  if (!userData?.notionapikey || !userData.notiondatabaseid || !userData.calendarurl) {
+    throw new Error("Missing required fields: notionapikey, notiondatabaseid, calendarurl");
+  }
+
   try {
     const CVEvents = (await getCvEvents(userData.calendarurl)).filter((e) =>
       isInRange(e.UTCStart),
@@ -17,7 +21,13 @@ export async function syncUser(userData: UserData): Promise<void> {
       isInRange(e.UTCStart),
     );
 
-    await deleteNotionEvents(NotionEvents, CVEvents, userData);
+    const { deletedCount, failedCount } = await deleteNotionEvents(
+      NotionEvents,
+      CVEvents,
+      userData,
+    );
+    let eventsProcessed = deletedCount;
+    let eventsFailed = failedCount;
 
     for (const event of CVEvents) {
       const eventInNotion = NotionEvents.find(
@@ -40,10 +50,13 @@ export async function syncUser(userData: UserData): Promise<void> {
         } else {
           await createEvent(event, userData);
         }
+        eventsProcessed++;
       } catch (error) {
+        eventsFailed++;
         logError("Error processing event", {
           context: "sync",
           databaseId: userData.notiondatabaseid,
+          eventId: event.id,
           eventTitle: event.title,
           error,
         });
@@ -52,11 +65,18 @@ export async function syncUser(userData: UserData): Promise<void> {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    logInfo("Sync completed for user", {
+    const result = { eventsProcessed, eventsFailed };
+    const meta = {
       context: "sync",
       databaseId: userData.notiondatabaseid,
-      eventsProcessed: CVEvents.length,
-    });
+      ...result,
+    };
+    if (eventsFailed > 0) {
+      logWarn("Sync completed with event failures", meta);
+    } else {
+      logInfo("Sync completed for user", meta);
+    }
+    return result;
   } catch (error) {
     logError("Error syncing user", {
       context: "sync",

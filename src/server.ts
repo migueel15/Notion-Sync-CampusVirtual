@@ -1,7 +1,7 @@
 import express from 'express'
 import { syncUser } from './sync.js'
 import { UserData } from './types.js'
-import { logError, logInfo } from './logger.js'
+import { logError, logInfo, logWarn } from './logger.js'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -20,14 +20,19 @@ app.post('/sync-user', async (req, res) => {
 			})
 		}
 
-		await syncUser(userData)
+		const result = await syncUser(userData)
 
 		res.json({ 
 			success: true, 
 			message: 'User sync completed successfully',
 			database: userData.notiondatabaseid
 		})
-		logInfo('User sync completed via API', { context: 'api', databaseId: userData.notiondatabaseid })
+		const meta = { context: 'api', databaseId: userData.notiondatabaseid, ...result }
+		if (result.eventsFailed > 0) {
+			logWarn('User sync via API completed with event failures', meta)
+		} else {
+			logInfo('User sync completed via API', meta)
+		}
 	} catch (error) {
 		logError('Error in sync-user endpoint', { context: 'api', databaseId: userData?.notiondatabaseid, error })
 		res.status(500).json({ 

@@ -7,6 +7,7 @@ Necesitas tener [docker](https://www.docker.com/) instalado en tu ordenador.
 
 - [Ejecutar contenedor](#ejecutar-contenedor)
 - [Configurar Notion](#configurar-notion)
+- [Funcionamiento y registros](docs/project-overview.md)
 - [Variables de entorno](#variables-de-entorno)
   - [Definición de variables](#definición-de-variables)
   - [Obtener variables de entorno](#obtener-variables-de-entorno)
